@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex
+set -e
 
 if test -d .bin; then
   echo "Directory .bin found; assuming bricks already downloaded"
