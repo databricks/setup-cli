@@ -67,3 +67,7 @@ runs:
         fi
 
         echo "$dir" >> $GITHUB_PATH
+
+    - name: Get Bricks version
+      shell: bash
+      run: bricks version --detail | jq .
