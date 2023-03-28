@@ -11,7 +11,7 @@ Ensure you have a token with access to the [Bricks repository](https://github.co
 In your GitHub Actions workflow, use the following step:
 
 ```yml
-- uses: databricks/setup-bricks@test
+- uses: databricks/setup-bricks
   with:
     token: ${{ secrets.GH_TOKEN }}
 ```
