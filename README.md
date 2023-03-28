@@ -6,6 +6,8 @@ As of March 2023, it installs the most recent snapshot build.
 
 ## Usage
 
+Ensure you have a token with access to the [Bricks repository](https://github.com/databricks/bricks).
+
 In your GitHub Actions workflow, use the following step:
 
 ```yml
