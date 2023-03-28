@@ -17,4 +17,18 @@ if [ -z "$last_successful_run_id" ]; then
   exit 1
 fi
 
-gh run download $last_successful_run_id -n bricks_linux_snapshot -D .bin
+# Synthesize correct artifact name.
+artifact="bricks"
+case $RUNNER_OS in
+Linux)
+    dir="${dir}_linux_snapshot"
+    ;;
+Windows)
+    dir="${dir}_windows_snapshot"
+    ;;
+macOS)
+    dir="${dir}_darwin_snapshot"
+    ;;
+esac
+
+gh run download $last_successful_run_id -n $artifact -D .bin
