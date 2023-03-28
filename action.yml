@@ -1,0 +1,27 @@
+name: Setup Bricks CLI
+
+description: |
+  Download the latest Bricks CLI snapshot build and add it to $PATH.
+
+inputs:
+  token:
+    description: 'A GitHub PAT'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Download snapshot build
+      shell: bash
+      run: bash ${{ github.action_path }}/download.sh
+      env:
+        GH_REPO: databricks/bricks
+        GH_TOKEN: ${{ inputs.token }}
+
+    - name: Add to $PATH
+      shell: bash
+      run: bash ${{ github.action_path }}/path.sh
+
+    - name: Get Bricks version
+      shell: bash
+      run: bricks version --detail | jq .
