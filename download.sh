@@ -17,17 +17,16 @@ if [ -z "$last_successful_run_id" ]; then
   exit 1
 fi
 
-# Synthesize correct artifact name.
-artifact="bricks"
+# Determine artifact name with the right binaries for this runner.
 case $RUNNER_OS in
 Linux)
-    dir="${dir}_linux_snapshot"
+    artifact="bricks_linux_snapshot"
     ;;
 Windows)
-    dir="${dir}_windows_snapshot"
+    artifact="bricks_windows_snapshot"
     ;;
 macOS)
-    dir="${dir}_darwin_snapshot"
+    artifact="bricks_darwin_snapshot"
     ;;
 esac
 
