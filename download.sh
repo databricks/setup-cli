@@ -14,7 +14,7 @@ fi
 
 # Find last successful deco build on $BRICKS_BRANCH.
 last_successful_run_id=$(
-  gh run list -b main -w release-snapshot --json 'databaseId,conclusion' |
+  gh run list -b "$BRICKS_BRANCH" -w release-snapshot --json 'databaseId,conclusion' |
       jq 'limit(1; .[] | select(.conclusion == "success")) | .databaseId'
 )
 if [ -z "$last_successful_run_id" ]; then
