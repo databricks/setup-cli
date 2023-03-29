@@ -8,6 +8,10 @@ inputs:
     description: 'A GitHub PAT'
     required: true
 
+  branch:
+    description: 'The branch to download the snapshot build for'
+    required: false
+
 runs:
   using: "composite"
   steps:
@@ -17,6 +21,7 @@ runs:
       env:
         GH_REPO: databricks/bricks
         GH_TOKEN: ${{ inputs.token }}
+        BRICKS_BRANCH: ${{ inputs.branch }}
 
     - name: Add to $PATH
       shell: bash
