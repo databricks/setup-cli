@@ -19,6 +19,8 @@ jobs:
       - uses: ./setup-bricks
         with:
           snapshot: true
+          token: ${{ secrets.GH_TOKEN }}
+          branch: main
 
       - run: bricks version
 
