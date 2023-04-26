@@ -5,15 +5,15 @@ description: |
 
 inputs:
   snapshot:
-    description: 'Install a snapshot build'
+    description: 'Install a snapshot build (set to "true" to enable).'
     required: false
 
   token:
-    description: 'A GitHub PAT'
+    description: '(snapshot build only) A GitHub PAT to access the Bricks repository.'
     required: false
 
   branch:
-    description: 'The branch to download the snapshot build for'
+    description: '(snapshot build only) The branch to download the snapshot build for.'
     required: false
 
 runs:
