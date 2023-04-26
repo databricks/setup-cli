@@ -20,7 +20,6 @@ runs:
   using: "composite"
   steps:
     - name: Download snapshot build
-      id: download_snapshot
       if: ${{ inputs.snapshot == 'true' }}
       shell: bash
       run: bash ${{ github.action_path }}/setup_snapshot.sh

@@ -41,4 +41,6 @@ esac
 # Download bricks release archive.
 curl -O https://databricks-bricks.s3.amazonaws.com/v$VERSION/$file.zip
 unzip $file.zip -d .bin
-ls -l .bin
+dir=$PWD/.bin
+chmod +x $dir/bricks
+echo "$dir" >> $GITHUB_PATH

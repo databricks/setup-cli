@@ -73,6 +73,8 @@ esac
 
 gh run download $last_successful_run_id -n $artifact -D .bin
 
+find $PWD/.bin
+
 dir="$PWD/.bin/$(bricks_snapshot_directory))"
 
 if [ ! -d "$dir" ]; then
