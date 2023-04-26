@@ -9,7 +9,20 @@ on:
       - main
 
 jobs:
-  version:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ./setup-bricks
+
+      - uses: ./setup-bricks
+        with:
+          snapshot: true
+
+      - run: bricks version
+
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

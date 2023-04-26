@@ -29,7 +29,7 @@ runs:
         BRICKS_BRANCH: ${{ inputs.branch }}
 
     - name: Download release build
-      if: ${{ inputs.snapshot != 'false' }}
+      if: ${{ inputs.snapshot != 'true' }}
       shell: bash
       run: bash ${{ github.action_path }}/download_release.sh
       env:
