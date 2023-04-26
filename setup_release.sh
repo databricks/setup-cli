@@ -1,50 +1,50 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 if test -d .bin; then
   echo "Directory .bin found; assuming bricks already downloaded"
   exit 0
 fi
 
-file="bricks_$VERSION"
+FILE="bricks_$VERSION"
 
 # Include operating system in file name.
 case $RUNNER_OS in
 Linux)
-    file="${file}_linux"
+    FILE="${FILE}_linux"
     ;;
 Windows)
-    file="${file}_windows"
+    FILE="${FILE}_windows"
     ;;
 macOS)
-    file="${file}_darwin"
+    FILE="${FILE}_darwin"
     ;;
 esac
 
 # Include architecture in file name.
 case $RUNNER_ARCH in
 X86)
-    file="${file}_386"
+    FILE="${FILE}_386"
 ;;
 X64)
-    file="${file}_amd64"
+    FILE="${FILE}_amd64"
 ;;
 ARM)
-    file="${file}_arm"
+    FILE="${FILE}_arm"
 ;;
 ARM64)
-    file="${file}_arm64"
+    FILE="${FILE}_arm64"
 ;;
 esac
 
 # Download bricks release archive.
-curl -s -O https://databricks-bricks.s3.amazonaws.com/v$VERSION/$file.zip
+curl -s -O "https://databricks-bricks.s3.amazonaws.com/v${VERSION}/${FILE}.zip"
 
 # Unzip bricks release archive.
-unzip -q $file.zip -d .bin
+unzip -q "${FILE}.zip" -d .bin
 
 # Add bricks to path.
 dir=$PWD/.bin
-chmod +x $dir/bricks
+chmod +x "${dir}/bricks"
 echo "$dir" >> $GITHUB_PATH

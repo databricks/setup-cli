@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 # Synthesize the directory name for the snapshot build.
 function bricks_snapshot_directory() {
     dir="bricks"
-    
+
     # Append correct os name.
     case $RUNNER_OS in
     Linux)
@@ -18,7 +18,7 @@ function bricks_snapshot_directory() {
         dir="${dir}_darwin"
         ;;
     esac
-    
+
     # Append correct arch name.
     case $RUNNER_ARCH in
     X86)
@@ -34,7 +34,7 @@ function bricks_snapshot_directory() {
         dir="${dir}_arm64"
         ;;
     esac
-    
+
     echo $dir
 }
 
