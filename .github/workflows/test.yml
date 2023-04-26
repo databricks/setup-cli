@@ -10,7 +10,16 @@ on:
 
 jobs:
   snapshot:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -25,7 +34,16 @@ jobs:
       - run: bricks version
 
   release:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
     steps:
       - uses: actions/checkout@v3
         with:
