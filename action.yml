@@ -20,9 +20,10 @@ runs:
   using: "composite"
   steps:
     - name: Download snapshot build
+      id: download_snapshot
       if: ${{ inputs.snapshot == 'true' }}
       shell: bash
-      run: bash ${{ github.action_path }}/download_snapshot.sh
+      run: bash ${{ github.action_path }}/setup_snapshot.sh
       env:
         GH_REPO: databricks/bricks
         GH_TOKEN: ${{ inputs.token }}
@@ -31,13 +32,9 @@ runs:
     - name: Download release build
       if: ${{ inputs.snapshot != 'true' }}
       shell: bash
-      run: bash ${{ github.action_path }}/download_release.sh
+      run: bash ${{ github.action_path }}/setup_release.sh
       env:
         VERSION: 0.0.30
-
-    - name: Add to $PATH
-      shell: bash
-      run: bash ${{ github.action_path }}/path.sh
 
     - name: Get Bricks version
       shell: bash
