@@ -39,10 +39,10 @@ ARM64)
 esac
 
 # Download bricks release archive.
-curl -O https://databricks-bricks.s3.amazonaws.com/v$VERSION/$file.zip
+curl -s -O https://databricks-bricks.s3.amazonaws.com/v$VERSION/$file.zip
 
 # Unzip bricks release archive.
-unzip $file.zip -d .bin
+unzip $file.zip -d .bin -q
 
 # Add bricks to path.
 dir=$PWD/.bin
