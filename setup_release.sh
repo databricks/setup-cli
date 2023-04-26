@@ -42,7 +42,7 @@ esac
 curl -s -O https://databricks-bricks.s3.amazonaws.com/v$VERSION/$file.zip
 
 # Unzip bricks release archive.
-unzip $file.zip -d .bin -q
+unzip -q $file.zip -d .bin
 
 # Add bricks to path.
 dir=$PWD/.bin
