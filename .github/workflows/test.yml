@@ -32,6 +32,7 @@ jobs:
           branch: main
 
       - run: bricks version
+        shell: bash
 
   release:
     runs-on: ${{ matrix.os }}
@@ -52,3 +53,4 @@ jobs:
       - uses: ./setup-bricks
 
       - run: bricks version
+        shell: bash
