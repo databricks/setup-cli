@@ -22,9 +22,7 @@ runs:
     - name: Download snapshot build
       if: ${{ inputs.snapshot == 'true' }}
       shell: bash
-      run: |
-        cd ${{ github.action_path }}
-        bash ./setup_snapshot.sh
+      run: bash $GITHUB_ACTION_PATH/setup_snapshot.sh
       env:
         GH_REPO: databricks/bricks
         GH_TOKEN: ${{ inputs.token }}
@@ -33,9 +31,7 @@ runs:
     - name: Download release build
       if: ${{ inputs.snapshot != 'true' }}
       shell: bash
-      run: |
-        cd ${{ github.action_path }}
-        bash ./setup_release.sh
+      run: bash $GITHUB_ACTION_PATH/setup_release.sh
       env:
         VERSION: 0.0.30
 
