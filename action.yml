@@ -33,7 +33,7 @@ runs:
       shell: bash
       run: bash $GITHUB_ACTION_PATH/setup_release.sh
       env:
-        VERSION: 0.0.30
+        VERSION: 0.0.31
 
     - name: Get Bricks version
       shell: bash
