@@ -40,7 +40,11 @@ esac
 
 # Download bricks release archive.
 curl -O https://databricks-bricks.s3.amazonaws.com/v$VERSION/$file.zip
+
+# Unzip bricks release archive.
 unzip $file.zip -d .bin
+
+# Add bricks to path.
 dir=$PWD/.bin
 chmod +x $dir/bricks
 echo "$dir" >> $GITHUB_PATH

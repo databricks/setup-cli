@@ -73,9 +73,7 @@ esac
 
 gh run download $last_successful_run_id -n $artifact -D .bin
 
-find $PWD/.bin
-
-dir="$PWD/.bin/$(bricks_snapshot_directory))"
+dir="$PWD/.bin/$(bricks_snapshot_directory)"
 
 if [ ! -d "$dir" ]; then
     echo "Directory does not exist: $dir"
@@ -89,5 +87,6 @@ if [ "$RUNNER_OS" == "Windows" ]; then
     )
 fi
 
+# Add bricks to path.
 chmod +x $dir/bricks
 echo "$dir" >> $GITHUB_PATH
