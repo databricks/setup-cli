@@ -9,11 +9,48 @@ on:
       - main
 
 jobs:
-  version:
-    runs-on: ubuntu-latest
+  snapshot:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
     steps:
       - uses: actions/checkout@v3
+        with:
+          path: ./setup-bricks
 
-      - uses: .
+      - uses: ./setup-bricks
+        with:
+          snapshot: true
+          token: ${{ secrets.GH_TOKEN }}
+          branch: main
 
       - run: bricks version
+        shell: bash
+
+  release:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ./setup-bricks
+
+      - uses: ./setup-bricks
+
+      - run: bricks version
+        shell: bash

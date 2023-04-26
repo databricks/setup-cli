@@ -4,28 +4,36 @@ description: |
   Download the latest Bricks CLI snapshot build and add it to $PATH.
 
 inputs:
+  snapshot:
+    description: 'Install a snapshot build (set to "true" to enable).'
+    required: false
+
   token:
-    description: 'A GitHub PAT'
-    required: true
+    description: '(snapshot build only) A GitHub PAT to access the Bricks repository.'
+    required: false
 
   branch:
-    description: 'The branch to download the snapshot build for'
+    description: '(snapshot build only) The branch to download the snapshot build for.'
     required: false
 
 runs:
   using: "composite"
   steps:
     - name: Download snapshot build
+      if: ${{ inputs.snapshot == 'true' }}
       shell: bash
-      run: bash ${{ github.action_path }}/download.sh
+      run: bash $GITHUB_ACTION_PATH/setup_snapshot.sh
       env:
         GH_REPO: databricks/bricks
         GH_TOKEN: ${{ inputs.token }}
         BRICKS_BRANCH: ${{ inputs.branch }}
 
-    - name: Add to $PATH
+    - name: Download release build
+      if: ${{ inputs.snapshot != 'true' }}
       shell: bash
-      run: bash ${{ github.action_path }}/path.sh
+      run: bash $GITHUB_ACTION_PATH/setup_release.sh
+      env:
+        VERSION: 0.0.30
 
     - name: Get Bricks version
       shell: bash
