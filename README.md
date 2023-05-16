@@ -1,24 +1,24 @@
-# setup-bricks
+# setup-cli
 
-This is a composite GitHub Action that sets up the Bricks CLI in your GitHub Actions workflow.
+This is a composite GitHub Action that sets up the Databricks CLI in your GitHub Actions workflow.
 
 ## Usage
 
 In your GitHub Actions workflow, use the following step:
 
 ```yml
-- uses: databricks/setup-bricks
+- uses: databricks/setup-cli
 ```
 
 <!--
 ### Snapshot build
 
-Ensure you have a token with access to the [Bricks repository](https://github.com/databricks/bricks).
+Ensure you have a token with access to the [Databricks CLI repository](https://github.com/databricks/cli).
 
 In your GitHub Actions workflow, use the following step:
 
 ```yml
-- uses: databricks/setup-bricks
+- uses: databricks/setup-cli
   with:
     token: ${{ secrets.GH_TOKEN }}
 ```

@@ -3,11 +3,11 @@
 set -euo pipefail
 
 if test -d .bin; then
-  echo "Directory .bin found; assuming bricks already downloaded"
+  echo "Directory .bin found; assuming CLI was already downloaded"
   exit 0
 fi
 
-FILE="bricks_$VERSION"
+FILE="databricks_cli_$VERSION"
 
 # Include operating system in file name.
 case $RUNNER_OS in
@@ -38,13 +38,13 @@ ARM64)
 ;;
 esac
 
-# Download bricks release archive.
+# Download release archive.
 curl -s -O "https://databricks-bricks.s3.amazonaws.com/v${VERSION}/${FILE}.zip"
 
-# Unzip bricks release archive.
+# Unzip release archive.
 unzip -q "${FILE}.zip" -d .bin
 
-# Add bricks to path.
+# Add databricks to path.
 dir=$PWD/.bin
-chmod +x "${dir}/bricks"
+chmod +x "${dir}/databricks"
 echo "$dir" >> $GITHUB_PATH
