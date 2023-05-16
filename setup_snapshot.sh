@@ -3,8 +3,8 @@
 set -euo pipefail
 
 # Synthesize the directory name for the snapshot build.
-function bricks_snapshot_directory() {
-    dir="bricks"
+function cli_snapshot_directory() {
+    dir="cli"
 
     # Append correct os name.
     case $RUNNER_OS in
@@ -39,7 +39,7 @@ function bricks_snapshot_directory() {
 }
 
 if test -d .bin; then
-  echo "Directory .bin found; assuming bricks already downloaded"
+  echo "Directory .bin found; assuming CLI was already downloaded"
   exit 0
 fi
 
@@ -61,19 +61,19 @@ fi
 # Determine artifact name with the right binaries for this runner.
 case $RUNNER_OS in
 Linux)
-    artifact="bricks_linux_snapshot"
+    artifact="cli_linux_snapshot"
     ;;
 Windows)
-    artifact="bricks_windows_snapshot"
+    artifact="cli_windows_snapshot"
     ;;
 macOS)
-    artifact="bricks_darwin_snapshot"
+    artifact="cli_darwin_snapshot"
     ;;
 esac
 
 gh run download $last_successful_run_id -n $artifact -D .bin
 
-dir="$PWD/.bin/$(bricks_snapshot_directory)"
+dir="$PWD/.bin/$(cli_snapshot_directory)"
 
 if [ ! -d "$dir" ]; then
     echo "Directory does not exist: $dir"
@@ -83,10 +83,10 @@ fi
 if [ "$RUNNER_OS" == "Windows" ]; then
     (
         cd $dir
-        mv ./bricks.exe ./bricks
+        mv ./databricks.exe ./databricks
     )
 fi
 
-# Add bricks to path.
-chmod +x $dir/bricks
+# Add databricks to path.
+chmod +x $dir/databricks
 echo "$dir" >> $GITHUB_PATH

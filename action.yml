@@ -1,7 +1,7 @@
-name: Setup Bricks CLI
+name: Setup Databricks CLI
 
 description: |
-  Download the latest Bricks CLI snapshot build and add it to $PATH.
+  Download the latest Databricks CLI snapshot build and add it to $PATH.
 
 inputs:
   snapshot:
@@ -9,7 +9,7 @@ inputs:
     required: false
 
   token:
-    description: '(snapshot build only) A GitHub PAT to access the Bricks repository.'
+    description: '(snapshot build only) A GitHub PAT to access the CLI repository.'
     required: false
 
   branch:
@@ -24,7 +24,7 @@ runs:
       shell: bash
       run: bash $GITHUB_ACTION_PATH/setup_snapshot.sh
       env:
-        GH_REPO: databricks/bricks
+        GH_REPO: databricks/cli
         GH_TOKEN: ${{ inputs.token }}
         BRICKS_BRANCH: ${{ inputs.branch }}
 
@@ -33,8 +33,8 @@ runs:
       shell: bash
       run: bash $GITHUB_ACTION_PATH/setup_release.sh
       env:
-        VERSION: 0.0.32
+        VERSION: 0.100.0
 
-    - name: Get Bricks version
+    - name: Get Databricks CLI version
       shell: bash
-      run: bricks version --detail | jq .
+      run: databricks version --detail | jq .

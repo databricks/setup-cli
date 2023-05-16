@@ -23,15 +23,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          path: ./setup-bricks
+          path: ./setup-cli
 
-      - uses: ./setup-bricks
+      - uses: ./setup-cli
         with:
           snapshot: true
           token: ${{ secrets.GH_TOKEN }}
           branch: main
 
-      - run: bricks version
+      - run: databricks version
         shell: bash
 
   release:
@@ -48,9 +48,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          path: ./setup-bricks
+          path: ./setup-cli
 
-      - uses: ./setup-bricks
+      - uses: ./setup-cli
 
-      - run: bricks version
+      - run: databricks version
         shell: bash
