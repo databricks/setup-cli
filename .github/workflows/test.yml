@@ -9,31 +9,6 @@ on:
       - main
 
 jobs:
-  snapshot:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - macos-latest
-          - ubuntu-latest
-          - windows-latest
-
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          path: ./setup-cli
-
-      - uses: ./setup-cli
-        with:
-          snapshot: true
-          token: ${{ secrets.GH_TOKEN }}
-          branch: main
-
-      - run: databricks version
-        shell: bash
-
   release:
     runs-on: ${{ matrix.os }}
 
