@@ -26,7 +26,7 @@ runs:
       env:
         GH_REPO: databricks/cli
         GH_TOKEN: ${{ inputs.token }}
-        BRICKS_BRANCH: ${{ inputs.branch }}
+        BRANCH: ${{ inputs.branch }}
 
     - name: Download release build
       if: ${{ inputs.snapshot != 'true' }}
