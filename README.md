@@ -26,9 +26,7 @@ In your GitHub Actions workflow, use the following step:
 
 ## Preview notice
 
-If you are planning to join the preview please send an acknowledgement to the following statement to dabs-preview@databricks.com.
-
-We just need you to acknowledge that:
+If you are planning to use this tool, please note that:
 
 * The product is in preview and not intended to be used in production;
 * The product may change or may never be released;
@@ -37,4 +35,5 @@ We just need you to acknowledge that:
 * We may terminate the preview or your access at any time;
 * Non-public information about the preview (including the fact that there is a preview for the feature/product itself) is confidential;
 
-Also - should we decide to release it, we'd love for you to be a reference if you find it useful - please let us know if you'd be willing to do so.
+Also - should we decide to release it, we'd love for you to be a reference if you find it useful - please let us know if you'd be willing to do so. You can contact us at dabs-preview@databricks.com.
+
