@@ -1,6 +1,6 @@
 # setup-cli
 
-This is a composite GitHub Action that sets up the Databricks CLI in your GitHub Actions workflow.
+This is a composite GitHub Action that sets up the Databricks CLI (preview version `>=0.100`) in your GitHub Actions workflow.
 
 ## Usage
 
