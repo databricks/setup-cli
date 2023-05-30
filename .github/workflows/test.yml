@@ -29,3 +29,23 @@ jobs:
 
       - run: databricks version
         shell: bash
+
+  install:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: ./install.sh
+        shell: bash
+
+      - run: databricks version
+        shell: bash
