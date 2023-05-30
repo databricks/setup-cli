@@ -65,7 +65,7 @@ jobs:
           - windows-latest
 
     steps:
-      - run: curl -fsSL https://raw.githubusercontent.com/databricks/cli/$GITHUB_SHA/install.sh | sh
+      - run: curl -fsSL https://raw.githubusercontent.com/databricks/cli/${{ env.GITHUB_SHA }}/install.sh | sh
         shell: bash
 
       - run: databricks version
