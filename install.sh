@@ -6,7 +6,7 @@ VERSION="0.100.2"
 FILE="databricks_cli_$VERSION"
 
 # Include operating system in file name.
-OS="$(uname -s)"
+OS="$(uname -s | cut -d '-' -f 1)"
 case "$OS" in
 Linux)
     FILE="${FILE}_linux"
@@ -15,6 +15,10 @@ Linux)
 Darwin)
     FILE="${FILE}_darwin"
     TARGET="/usr/local/bin"
+    ;;
+MINGW64_NT)
+    FILE="${FILE}_windows"
+    TARGET="/c/Windows"
     ;;
 *)
     echo "Unknown operating system: $OS"
@@ -68,3 +72,4 @@ unzip -q "${FILE}.zip"
 # Add databricks to path.
 chmod +x ./databricks
 cp ./databricks "$TARGET"
+echo "Installed $($TARGET/databricks -v) at $TARGET/databricks."

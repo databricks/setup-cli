@@ -44,6 +44,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - run: env
+        shell: bash
+
       - run: ./install.sh
         shell: bash
 
