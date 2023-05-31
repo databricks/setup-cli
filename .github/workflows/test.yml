@@ -29,3 +29,44 @@ jobs:
 
       - run: databricks version
         shell: bash
+
+  install:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: env
+        shell: bash
+
+      - run: ./install.sh
+        shell: bash
+
+      - run: databricks version
+        shell: bash
+
+  curl:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
+    steps:
+      - run: curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/${{ github.sha }}/install.sh | sh
+        shell: bash
+
+      - run: databricks version
+        shell: bash
