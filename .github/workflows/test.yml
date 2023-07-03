@@ -30,6 +30,9 @@ jobs:
       - run: databricks version
         shell: bash
 
+      - run: ./setup-cli/test.sh
+        shell: bash
+
   install:
     runs-on: ${{ matrix.os }}
 
@@ -43,14 +46,19 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          path: ./setup-cli
 
       - run: env
         shell: bash
 
-      - run: ./install.sh
+      - run: ./setup-cli/install.sh
         shell: bash
 
       - run: databricks version
+        shell: bash
+
+      - run: ./setup-cli/test.sh
         shell: bash
 
   curl:
@@ -65,8 +73,15 @@ jobs:
           - windows-latest
 
     steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ./setup-cli
+
       - run: curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/${{ github.sha }}/install.sh | sh
         shell: bash
 
       - run: databricks version
+        shell: bash
+
+      - run: ./setup-cli/test.sh
         shell: bash
