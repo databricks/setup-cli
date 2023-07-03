@@ -8,10 +8,6 @@ inputs:
     description: 'Install a snapshot build (set to "true" to enable).'
     required: false
 
-  token:
-    description: '(snapshot build only) A GitHub PAT to access the CLI repository.'
-    required: false
-
   branch:
     description: '(snapshot build only) The branch to download the snapshot build for.'
     required: false
@@ -25,7 +21,6 @@ runs:
       run: bash $GITHUB_ACTION_PATH/setup_snapshot.sh
       env:
         GH_REPO: databricks/cli
-        GH_TOKEN: ${{ inputs.token }}
         BRANCH: ${{ inputs.branch }}
 
     - name: Download release build
