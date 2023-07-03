@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION="0.100.2"
+VERSION="0.200.1"
 FILE="databricks_cli_$VERSION"
 
 # Include operating system in file name.
@@ -64,7 +64,7 @@ fi
 cd "$(mktemp -d)"
 
 # Download release archive.
-curl -s -O "https://databricks-bricks.s3.amazonaws.com/v${VERSION}/${FILE}.zip"
+curl -s -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
 
 # Unzip release archive.
 unzip -q "${FILE}.zip"
