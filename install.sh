@@ -62,8 +62,7 @@ fi
 
 # Change into temporary directory.
 tmpdir="$(mktemp -d)"
-cd "$tmpdir"
-trap "rm -rf $tmpdir" EXIT
+pushd "$tmpdir" > /dev/null
 
 # Download release archive.
 curl -L -s -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
@@ -75,3 +74,7 @@ unzip -q "${FILE}.zip"
 chmod +x ./databricks
 cp ./databricks "$TARGET"
 echo "Installed $($TARGET/databricks -v) at $TARGET/databricks."
+
+# Clean up temporary directory.
+popd > /dev/null
+rm -rf "$tmpdir" || true
