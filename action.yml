@@ -37,4 +37,4 @@ runs:
 
     - name: Get Databricks CLI version
       shell: bash
-      run: databricks version --detail | jq .
+      run: databricks version --output json | jq .
