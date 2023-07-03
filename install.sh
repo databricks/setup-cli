@@ -64,7 +64,7 @@ fi
 cd "$(mktemp -d)"
 
 # Download release archive.
-curl -s -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
+curl -L -s -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
 
 # Unzip release archive.
 unzip -q "${FILE}.zip"
