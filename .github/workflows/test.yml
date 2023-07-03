@@ -30,6 +30,11 @@ jobs:
       - run: databricks version
         shell: bash
 
+      - name: Test that the correct version is installed
+        shell: bash
+        run: |
+          [[ $(databricks version --output json | jq .Version) == "$(cat ./VERSION)" ]]
+
   install:
     runs-on: ${{ matrix.os }}
 
@@ -53,6 +58,11 @@ jobs:
       - run: databricks version
         shell: bash
 
+      - name: Test that the correct version is installed
+        shell: bash
+        run: |
+          [[ $(databricks version --output json | jq .Version) == "$(cat ./VERSION)" ]]
+
   curl:
     runs-on: ${{ matrix.os }}
 
@@ -70,3 +80,8 @@ jobs:
 
       - run: databricks version
         shell: bash
+
+      - name: Test that the correct version is installed
+        shell: bash
+        run: |
+          [[ $(databricks version --output json | jq .Version) == "$(cat ./VERSION)" ]]
