@@ -33,7 +33,7 @@ jobs:
       - name: Test that the correct version is installed
         shell: bash
         run: |
-          [[ $(databricks version --output json | jq .Version) == "$(cat ./VERSION)" ]]
+          [[ $(databricks version --output json | jq .Version) == "$(cat ./setup-cli/VERSION)" ]]
 
   install:
     runs-on: ${{ matrix.os }}
@@ -48,11 +48,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          path: ./setup-cli
 
       - run: env
         shell: bash
 
-      - run: ./install.sh
+      - run: ./setup-cli/install.sh
         shell: bash
 
       - run: databricks version
@@ -61,7 +63,7 @@ jobs:
       - name: Test that the correct version is installed
         shell: bash
         run: |
-          [[ $(databricks version --output json | jq .Version) == "$(cat ./VERSION)" ]]
+          [[ $(databricks version --output json | jq .Version) == "$(cat ./setup-cli/VERSION)" ]]
 
   curl:
     runs-on: ${{ matrix.os }}
@@ -75,6 +77,10 @@ jobs:
           - windows-latest
 
     steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ./setup-cli
+
       - run: curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/${{ github.sha }}/install.sh | sh
         shell: bash
 
@@ -84,4 +90,4 @@ jobs:
       - name: Test that the correct version is installed
         shell: bash
         run: |
-          [[ $(databricks version --output json | jq .Version) == "$(cat ./VERSION)" ]]
+          [[ $(databricks version --output json | jq .Version) == "$(cat ./setup-cli/VERSION)" ]]
