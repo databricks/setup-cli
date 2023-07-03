@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -e
+set -euo pipefail
 
 VERSION="0.200.1"
 FILE="databricks_cli_$VERSION"
@@ -61,7 +61,9 @@ if [ -f "$TARGET/databricks" ]; then
 fi
 
 # Change into temporary directory.
-cd "$(mktemp -d)"
+tmpdir="$(mktemp -d)"
+cd "$tmpdir"
+trap "rm -rf $tmpdir" EXIT
 
 # Download release archive.
 curl -L -s -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
