@@ -1,6 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/sh
 
-set -euo pipefail
+# Note: we cannot assume we're running bash and use the set -euo pipefail approach.
+# Usage in the wild uses the "curl | sh" approach and we need that to continue working.
+set -e
 
 VERSION="0.200.1"
 FILE="databricks_cli_$VERSION"
