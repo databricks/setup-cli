@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Note: we cannot assume we're running bash and use the set -euo pipefail approach.
+# Usage in the wild uses the "curl | sh" approach and we need that to continue working.
 set -e
 
 VERSION="0.200.1"
@@ -61,7 +63,8 @@ if [ -f "$TARGET/databricks" ]; then
 fi
 
 # Change into temporary directory.
-cd "$(mktemp -d)"
+tmpdir="$(mktemp -d)"
+cd "$tmpdir"
 
 # Download release archive.
 curl -L -s -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
@@ -73,3 +76,7 @@ unzip -q "${FILE}.zip"
 chmod +x ./databricks
 cp ./databricks "$TARGET"
 echo "Installed $($TARGET/databricks -v) at $TARGET/databricks."
+
+# Clean up temporary directory.
+cd "$OLDPWD"
+rm -rf "$tmpdir" || true
