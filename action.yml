@@ -33,7 +33,7 @@ runs:
       shell: bash
       run: bash $GITHUB_ACTION_PATH/setup_release.sh
       env:
-        VERSION: 0.100.2
+        VERSION: 0.200.1
 
     - name: Get Databricks CLI version
       shell: bash

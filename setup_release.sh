@@ -39,7 +39,7 @@ ARM64)
 esac
 
 # Download release archive.
-curl -s -O "https://databricks-bricks.s3.amazonaws.com/v${VERSION}/${FILE}.zip"
+curl -s -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
 
 # Unzip release archive.
 unzip -q "${FILE}.zip" -d .bin
