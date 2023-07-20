@@ -40,7 +40,7 @@ x86_64)
 arm)
     FILE="${FILE}_arm"
     ;;
-arm64)
+arm64|aarch64)
     FILE="${FILE}_arm64"
     ;;
 *)
