@@ -4,6 +4,11 @@ description: |
   Download the latest Databricks CLI snapshot build and add it to $PATH.
 
 inputs:
+  version:
+    description: 'The version of the Databricks CLI to download (defaults to "latest").'
+    default: 'latest'
+    required: false
+
   snapshot:
     description: 'Install a snapshot build (set to "true" to enable).'
     required: false
@@ -28,7 +33,7 @@ runs:
       shell: bash
       run: bash $GITHUB_ACTION_PATH/setup_release.sh
       env:
-        VERSION: 0.203.0
+        VERSION: ${{ inputs.version }}
 
     - name: Get Databricks CLI version
       shell: bash

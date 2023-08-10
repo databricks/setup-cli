@@ -7,6 +7,11 @@ if test -d .bin; then
   exit 0
 fi
 
+# Pull latest version from VERSION file if not set.
+if [ "${VERSION}" == "latest" ]; then
+    VERSION=$(cat $(dirname $0)/VERSION)
+fi
+
 FILE="databricks_cli_$VERSION"
 
 # Include operating system in file name.

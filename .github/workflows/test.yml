@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  release:
+  action_with_defaults:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -30,7 +30,33 @@ jobs:
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/test.sh
+      - run: ./setup-cli/test.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+  action_with_version:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ./setup-cli
+
+      - uses: ./setup-cli
+        with:
+          version: 0.200.0
+
+      - run: databricks version
+        shell: bash
+
+      - run: ./setup-cli/test.sh 0.200.0
         shell: bash
 
   install:
@@ -58,7 +84,7 @@ jobs:
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/test.sh
+      - run: ./setup-cli/test.sh $(cat ./setup-cli/VERSION)
         shell: bash
 
   curl:
@@ -83,5 +109,5 @@ jobs:
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/test.sh
+      - run: ./setup-cli/test.sh $(cat ./setup-cli/VERSION)
         shell: bash

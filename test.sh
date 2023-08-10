@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-EXPECTED=$(cat $(dirname $0)/VERSION)
+EXPECTED="${1:-invalid}"
 ACTUAL=$(databricks version --output json | jq -r .Version)
 
 if [[ "$EXPECTED" != "$ACTUAL" ]]; then
