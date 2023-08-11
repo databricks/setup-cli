@@ -8,7 +8,7 @@ if test -d .bin; then
 fi
 
 # Pull latest version from VERSION file if not set.
-if [ "${VERSION}" == "latest" ]; then
+if [ -z "${VERSION:-}" ]; then
     VERSION=$(cat $(dirname $0)/VERSION)
 fi
 

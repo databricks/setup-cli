@@ -5,8 +5,7 @@ description: |
 
 inputs:
   version:
-    description: 'The version of the Databricks CLI to download (defaults to "latest").'
-    default: 'latest'
+    description: 'The version of the Databricks CLI to download (defaults to latest).'
     required: false
 
   snapshot:
