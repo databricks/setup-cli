@@ -1,0 +1,31 @@
+name: test
+
+on:
+  # Update tags on every push to main.
+  push:
+    branches:
+      - main
+
+  # To allow for manual testing.
+  workflow_dispatch:
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-tags: true
+
+      - shell: bash
+        run: |
+          set -ex
+          commits=$(git log --pretty=format:"%h" ./VERSION)
+          for commit in $commits; do
+              version=$(git show $commit:./VERSION)
+              git tag "v${version}" $commit
+          done
+
+      - shell: bash
+        run: git push --tags
