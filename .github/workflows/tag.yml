@@ -1,4 +1,4 @@
-name: test
+name: tag
 
 on:
   # Update tags on every push to main.
@@ -16,16 +16,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           fetch-tags: true
 
-      - shell: bash
+      - name: Tag new versions
+        shell: bash
         run: |
-          set -ex
+          set -e
+
           commits=$(git log --pretty=format:"%h" ./VERSION)
           for commit in $commits; do
               version=$(git show $commit:./VERSION)
+              if [ -n "$(git tag -l "v${version}")" ]; then
+                  continue
+              fi
+
+              echo "Tagging $commit as v${version}"
               git tag "v${version}" $commit
           done
 
-      - shell: bash
+      - name: Push new tags
+        shell: bash
         run: git push --tags
