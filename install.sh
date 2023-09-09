@@ -1,7 +1,6 @@
 #!/bin/sh
 
 # Note: we cannot assume we're running bash and use the set -euo pipefail approach.
-# Usage in the wild uses the "curl | sh" approach and we need that to continue working.
 set -e
 
 VERSION="0.204.0"
@@ -52,13 +51,18 @@ esac
 # Make sure the target directory is writable.
 if [ ! -w "$TARGET" ]; then
     echo "Target directory $TARGET is not writable."
-    echo "Please run this script through sudo to allow writing to $TARGET."
+    echo "Please run this script through 'sudo' to allow writing to $TARGET."
+    echo
+    echo "If you're running this script from a terminal, you can do so using"
+    echo "  curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sudo sh"
     exit 1
 fi
 
 # Make sure we don't overwrite an existing installation.
 if [ -f "$TARGET/databricks" ]; then
     echo "Target path $TARGET/databricks already exists."
+    echo "If you have an existing Databricks CLI installation, please first remove it using"
+    echo "  sudo rm '$TARGET/databricks'"
     exit 1
 fi
 
