@@ -1,0 +1,37 @@
+name: release-pr
+
+on:
+  # To allow for manual testing.
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        required: true
+
+jobs:
+  release-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Change to a new version
+        run: |
+          echo "${{ github.event.inputs.version }}" > VERSION
+          sed -i -E "s/VERSION=(.*)/VERSION=\"${{ github.event.inputs.version }}\"/" install.sh
+
+      - name: Create a release pull request
+        id: cpr
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Release CLI version v${{ github.event.inputs.version }}
+          body: Release CLI version v${{ github.event.inputs.version }}
+          committer: GitHub <noreply@github.com>
+          branch: release-v${{ github.event.inputs.version }}
+          title: 'Release CLI version v${{ github.event.inputs.version }}'
+          team-reviewers: eng-dev-ecosystem
+          draft: false
