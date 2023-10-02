@@ -28,7 +28,7 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Release CLI version ${{ github.event.inputs.version }}
+          commit-message: Release CLI version v${{ github.event.inputs.version }}
           body: Release CLI version ${{ github.event.inputs.version }}
           committer: GitHub <noreply@github.com>
           branch: release-v${{ github.event.inputs.version }}
