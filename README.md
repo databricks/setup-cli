@@ -7,7 +7,7 @@ This is a composite GitHub Action that sets up the Databricks CLI (preview versi
 In your GitHub Actions workflow, use the following step:
 
 ```yml
-- uses: databricks/setup-cli
+- uses: databricks/setup-cli@main
 ```
 
 <!--
