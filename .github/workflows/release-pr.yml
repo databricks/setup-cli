@@ -27,11 +27,11 @@ jobs:
         id: cpr
         uses: peter-evans/create-pull-request@v5
         with:
+          author: "eng-dev-ecosystem-bot <eng-dev-ecosystem-bot@users.noreply.github.com>"
+          committer: "eng-dev-ecosystem-bot <eng-dev-ecosystem-bot@users.noreply.github.com>"
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: Release CLI version v${{ github.event.inputs.version }}
           body: Release CLI version v${{ github.event.inputs.version }}
-          committer: GitHub <noreply@github.com>
           branch: release-v${{ github.event.inputs.version }}
           title: 'Release CLI version v${{ github.event.inputs.version }}'
-          team-reviewers: eng-dev-ecosystem
           draft: false
