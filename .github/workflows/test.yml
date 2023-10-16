@@ -1,12 +1,13 @@
 name: test
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
+    types: [opened, synchronize]
+
+  push:
+    branches: [main]
+
+  workflow_dispatch:
 
 jobs:
   action_with_defaults:
