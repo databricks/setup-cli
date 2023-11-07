@@ -11,23 +11,20 @@ OS="$(uname -s | cut -d '-' -f 1)"
 case "$OS" in
 Linux)
     FILE="${FILE}_linux"
-    if [ -n "${TARGET+set}" ]; then
-        echo "TARGET already defined at $TARGET"
-    else TARGET="/usr/local/bin"
+    if [ ! -n "${TARGET+set}" ]; then
+        TARGET="/usr/local/bin"
     fi
     ;;
 Darwin)
     FILE="${FILE}_darwin"
-    if [ -n "${TARGET+set}" ]; then
-        echo "TARGET already defined at $TARGET"
-    else TARGET="/usr/local/bin"
+    if [ ! -n "${TARGET+set}" ]; then
+        TARGET="/usr/local/bin"
     fi
     ;;
 MINGW64_NT)
     FILE="${FILE}_windows"
-    if [ -n "${TARGET+set}" ]; then
-        echo "TARGET already defined at $TARGET"
-    else TARGET="/c/Windows"
+    if [ ! -n "${TARGET+set}" ]; then
+        TARGET="/c/Windows"
     fi
     ;;
 *)
