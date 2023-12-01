@@ -29,7 +29,7 @@ jobs:
         with:
           author: "eng-dev-ecosystem-bot <eng-dev-ecosystem-bot@users.noreply.github.com>"
           committer: "eng-dev-ecosystem-bot <eng-dev-ecosystem-bot@users.noreply.github.com>"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.DECO_GITHUB_TOKEN }}
           commit-message: Release CLI v${{ github.event.inputs.version }}
           body: Release CLI v${{ github.event.inputs.version }}
           branch: release-v${{ github.event.inputs.version }}
