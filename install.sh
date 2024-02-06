@@ -27,6 +27,11 @@ MINGW64_NT)
     ;;
 esac
 
+# Set target to ~/bin if DATABRICKS_RUNTIME_VERSION environment variable is set.
+if [ -n "$DATABRICKS_RUNTIME_VERSION" ]; then
+    TARGET="$HOME/bin"
+fi
+
 # Include architecture in file name.
 ARCH="$(uname -m)"
 case "$ARCH" in
