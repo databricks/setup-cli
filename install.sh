@@ -30,6 +30,7 @@ esac
 # Set target to ~/bin if DATABRICKS_RUNTIME_VERSION environment variable is set.
 if [ -n "$DATABRICKS_RUNTIME_VERSION" ]; then
     TARGET="$HOME/bin"
+    mkdir -p "$TARGET"
 fi
 
 # Include architecture in file name.
