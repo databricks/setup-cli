@@ -11,21 +11,28 @@ OS="$(uname -s | cut -d '-' -f 1)"
 case "$OS" in
 Linux)
     FILE="${FILE}_linux"
-    TARGET="/usr/local/bin"
+    if [ ! -n "${TARGET+set}" ]; then
+        TARGET="/usr/local/bin"
+    fi
     ;;
 Darwin)
     FILE="${FILE}_darwin"
-    TARGET="/usr/local/bin"
+    if [ ! -n "${TARGET+set}" ]; then
+        TARGET="/usr/local/bin"
+    fi
     ;;
 MINGW64_NT)
     FILE="${FILE}_windows"
-    TARGET="/c/Windows"
+    if [ ! -n "${TARGET+set}" ]; then
+        TARGET="/c/Windows"
+    fi
     ;;
 *)
     echo "Unknown operating system: $OS"
     exit 1
     ;;
 esac
+
 
 # Include architecture in file name.
 ARCH="$(uname -m)"
