@@ -103,6 +103,9 @@ jobs:
         env:
           DATABRICKS_RUNTIME_VERSION: value-does-not-matter
 
+      # Append ~/bin to the PATH. This helps with the assertions in the next steps.
+      - run: echo "export PATH=\$PATH:\$HOME/bin" >> $GITHUB_ENV
+
       - run: databricks version
         shell: bash
 
@@ -150,7 +153,10 @@ jobs:
       - run: curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/${{ github.sha }}/install.sh | sh
         shell: bash
         env:
-          DATABRICKS_RUNTIME_VERSION: 15.0
+          DATABRICKS_RUNTIME_VERSION: value-does-not-matter
+
+      # Append ~/bin to the PATH. This helps with the assertions in the next steps.
+      - run: echo "export PATH=\$PATH:\$HOME/bin" >> $GITHUB_ENV
 
       - run: databricks version
         shell: bash
