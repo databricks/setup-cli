@@ -104,7 +104,7 @@ jobs:
           DATABRICKS_RUNTIME_VERSION: value-does-not-matter
 
       # Append ~/bin to the PATH. This helps with the assertions in the next steps.
-      - run: echo "export PATH=\$PATH:\$HOME/bin" >> $GITHUB_ENV
+      - run: echo "PATH=$PATH:$HOME/bin" >> $GITHUB_ENV
 
       - run: databricks version
         shell: bash
@@ -156,7 +156,7 @@ jobs:
           DATABRICKS_RUNTIME_VERSION: value-does-not-matter
 
       # Append ~/bin to the PATH. This helps with the assertions in the next steps.
-      - run: echo "export PATH=\$PATH:\$HOME/bin" >> $GITHUB_ENV
+      - run: echo "PATH=$PATH:$HOME/bin" >> $GITHUB_ENV
 
       - run: databricks version
         shell: bash
