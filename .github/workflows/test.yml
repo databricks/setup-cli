@@ -79,6 +79,10 @@ jobs:
       - run: env
         shell: bash
 
+      - name: Assert databricks CLI is not already installed
+        run: ./setup-cli/assert/not-installed.sh
+        shell: bash
+
       - run: ./setup-cli/install.sh
         shell: bash
 
@@ -108,15 +112,21 @@ jobs:
         with:
           path: ./setup-cli
 
-      - run: ./setup-cli/install.sh
+      # Append ~/bin to the PATH. This helps with the assertions in the next steps.
+      - run: echo "PATH=$PATH:$HOME/bin" >> $GITHUB_ENV
+
+      - name: Assert databricks CLI is not already installed
+        run: ./setup-cli/assert/not-installed.sh
+        shell: bash
+
+      - name: Install the CLI
+        run: ./setup-cli/install.sh
         shell: bash
         env:
           DATABRICKS_RUNTIME_VERSION: value-does-not-matter
 
-      # Append ~/bin to the PATH. This helps with the assertions in the next steps.
-      - run: echo "PATH=$PATH:$HOME/bin" >> $GITHUB_ENV
-
-      - run: databricks version
+      - name: Run the CLI
+        run: databricks version
         shell: bash
 
       - name: Assert the version of the CLI installed
@@ -164,6 +174,34 @@ jobs:
 
 
   curl-dbr:
+    # All DBR images are built on top of Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ./setup-cli
+
+      - run: curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/${{ github.sha }}/install.sh | sh
+        shell: bash
+        env:
+          DATABRICKS_RUNTIME_VERSION: value-does-not-matter
+
+      # Append ~/bin to the PATH. This helps with the assertions in the next steps.
+      - run: echo "PATH=$PATH:$HOME/bin" >> $GITHUB_ENV
+
+      - run: databricks version
+        shell: bash
+
+      - name: Assert the version of the CLI installed
+        run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+      - name: Assert installation path is ~/bin
+        run: ./setup-cli/assert/path.sh ~/bin/databricks
+        shell: bash
+
+  curl-dbr-main:
     # All DBR images are built on top of Ubuntu
     runs-on: ubuntu-latest
 
