@@ -31,7 +31,7 @@ jobs:
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/test.sh $(cat ./setup-cli/VERSION)
+      - run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
         shell: bash
 
   action_with_version:
@@ -57,7 +57,7 @@ jobs:
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/test.sh 0.200.0
+      - run: ./setup-cli/assert/version.sh 0.200.0
         shell: bash
 
   install:
@@ -79,13 +79,62 @@ jobs:
       - run: env
         shell: bash
 
+      - name: Assert databricks CLI is not already installed
+        run: ./setup-cli/assert/not-installed.sh
+        shell: bash
+
       - run: ./setup-cli/install.sh
         shell: bash
 
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/test.sh $(cat ./setup-cli/VERSION)
+      - name: Assert the version of the CLI installed
+        run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+      - name: Assert installation path is /usr/local/bin for non-windows platforms
+        run: ./setup-cli/assert/path.sh /usr/local/bin/databricks
+        if: matrix.os != 'windows-latest'
+        shell: bash
+
+      - name: Assert installation path is /c/Windows for windows platforms
+        if: matrix.os == 'windows-latest'
+        run: ./setup-cli/assert/path.sh /c/Windows/databricks
+
+
+  install-dbr:
+    # All DBR images are built on top of Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ./setup-cli
+
+      # Append ~/bin to the PATH. This helps with the assertions in the next steps.
+      - run: echo "PATH=$PATH:$HOME/bin" >> $GITHUB_ENV
+
+      - name: Assert databricks CLI is not already installed
+        run: ./setup-cli/assert/not-installed.sh
+        shell: bash
+
+      - name: Install the CLI
+        run: ./setup-cli/install.sh
+        shell: bash
+        env:
+          DATABRICKS_RUNTIME_VERSION: value-does-not-matter
+
+      - name: Run the CLI
+        run: databricks version
+        shell: bash
+
+      - name: Assert the version of the CLI installed
+        run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+      - name: Assert installation path is ~/bin
+        run: ./setup-cli/assert/path.sh ~/bin/databricks
         shell: bash
 
   curl:
@@ -104,11 +153,57 @@ jobs:
         with:
           path: ./setup-cli
 
+      - name: Assert databricks CLI is not already installed
+        run: ./setup-cli/assert/not-installed.sh
+        shell: bash
+
       - run: curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/${{ github.sha }}/install.sh | sh
         shell: bash
 
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/test.sh $(cat ./setup-cli/VERSION)
+      - name: Assert the version of the CLI installed
+        run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+      - name: Assert installation path is /usr/local/bin for non-windows platforms
+        run: ./setup-cli/assert/path.sh /usr/local/bin/databricks
+        if: matrix.os != 'windows-latest'
+        shell: bash
+
+      - name: Assert installation path is /c/Windows for windows platforms
+        if: matrix.os == 'windows-latest'
+        run: ./setup-cli/assert/path.sh /c/Windows/databricks
+
+  curl-dbr:
+    # All DBR images are built on top of Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ./setup-cli
+
+      # Append ~/bin to the PATH. This helps with the assertions in the next steps.
+      - run: echo "PATH=$PATH:$HOME/bin" >> $GITHUB_ENV
+
+      - name: Assert databricks CLI is not already installed
+        run: ./setup-cli/assert/not-installed.sh
+        shell: bash
+
+      - run: curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/${{ github.sha }}/install.sh | sh
+        shell: bash
+        env:
+          DATABRICKS_RUNTIME_VERSION: value-does-not-matter
+
+      - run: databricks version
+        shell: bash
+
+      - name: Assert the version of the CLI installed
+        run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+      - name: Assert installation path is ~/bin
+        run: ./setup-cli/assert/path.sh ~/bin/databricks
         shell: bash
