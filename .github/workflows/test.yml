@@ -1,5 +1,6 @@
 name: test
 
+# TODO: Add assertion on installation path for the default routes
 on:
   pull_request:
     types: [opened, synchronize]
@@ -31,7 +32,7 @@ jobs:
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/test.sh $(cat ./setup-cli/VERSION)
+      - run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
         shell: bash
 
   action_with_version:
@@ -57,7 +58,7 @@ jobs:
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/test.sh 0.200.0
+      - run: ./setup-cli/assert/version.sh 0.200.0
         shell: bash
 
   install:
@@ -85,7 +86,30 @@ jobs:
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/test.sh $(cat ./setup-cli/VERSION)
+      - run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+  install-dbr:
+    # All DBR images are built on top of Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ./setup-cli
+
+      - run: ./setup-cli/install.sh
+        shell: bash
+        env:
+          DATABRICKS_RUNTIME_VERSION: value-does-not-matter
+
+      - run: databricks version
+        shell: bash
+
+      - run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+      - run: ./setup-cli/assert/path.sh ~/databricks
         shell: bash
 
   curl:
@@ -110,5 +134,29 @@ jobs:
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/test.sh $(cat ./setup-cli/VERSION)
+      - run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+
+  curl-dbr:
+    # All DBR images are built on top of Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ./setup-cli
+
+      - run: curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/${{ github.sha }}/install.sh | sh
+        shell: bash
+        env:
+          DATABRICKS_RUNTIME_VERSION: 15.0
+
+      - run: databricks version
+        shell: bash
+
+      - run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+      - run: ./setup-cli/assert/path.sh ~/databricks
         shell: bash

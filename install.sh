@@ -29,7 +29,10 @@ esac
 
 # Set target to ~/bin if DATABRICKS_RUNTIME_VERSION environment variable is set.
 if [ -n "$DATABRICKS_RUNTIME_VERSION" ]; then
+    # Set the installation target to ~/bin when run on DBR
     TARGET="$HOME/bin"
+
+    # Create the target directory if it does not exist
     mkdir -p "$TARGET"
 fi
 
