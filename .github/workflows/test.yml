@@ -112,8 +112,9 @@ jobs:
         with:
           path: ./setup-cli
 
-      # Append ~/bin to the PATH. This helps with the assertions in the next steps.
-      - run: echo "PATH=$PATH:$HOME/bin" >> $GITHUB_ENV
+      # When run on DBR, the installation scripts installs the CLI to ~/bin. Add
+      # it to $PATH to make assertions work.
+      - run: echo "$HOME/bin" >> $GITHUB_PATH
 
       - name: Assert databricks CLI is not already installed
         run: ./setup-cli/assert/not-installed.sh
@@ -185,8 +186,9 @@ jobs:
         with:
           path: ./setup-cli
 
-      # Append ~/bin to the PATH. This helps with the assertions in the next steps.
-      - run: echo "PATH=$PATH:$HOME/bin" >> $GITHUB_ENV
+      # When run on DBR, the installation scripts installs the CLI to ~/bin. Add
+      # it to $PATH to make assertions work.
+      - run: echo "$HOME/bin" >> $GITHUB_PATH
 
       - name: Assert databricks CLI is not already installed
         run: ./setup-cli/assert/not-installed.sh
