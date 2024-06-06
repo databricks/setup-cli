@@ -71,7 +71,7 @@ macOS)
     ;;
 esac
 
-gh run download $last_successful_run_id -n $artifact -D .bin
+gh run download "$last_successful_run_id" -n "$artifact" -D .bin
 
 dir="$PWD/.bin/$(cli_snapshot_directory)"
 
@@ -82,11 +82,11 @@ fi
 
 if [ "$RUNNER_OS" == "Windows" ]; then
     (
-        cd $dir
+        cd "$dir"
         mv ./databricks.exe ./databricks
     )
 fi
 
 # Add databricks to path.
-chmod +x $dir/databricks
-echo "$dir" >> $GITHUB_PATH
+chmod +x "$dir/databricks"
+echo "$dir" >> "$GITHUB_PATH"

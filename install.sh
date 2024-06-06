@@ -88,7 +88,7 @@ unzip -q "${FILE}.zip"
 # Add databricks to path.
 chmod +x ./databricks
 cp ./databricks "$TARGET"
-echo "Installed $($TARGET/databricks -v) at $TARGET/databricks."
+echo "Installed $("$TARGET/databricks" -v) at $TARGET/databricks."
 
 # Clean up temporary directory.
 cd "$OLDPWD"

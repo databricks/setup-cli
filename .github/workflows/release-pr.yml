@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           fetch-tags: true
@@ -25,7 +25,9 @@ jobs:
 
       - name: Create a release pull request
         id: cpr
-        uses: peter-evans/create-pull-request@v5
+
+        # Version v6.0.5
+        uses: peter-evans/create-pull-request@6d6857d36972b65feb161a90e484f2984215f83e
         with:
           author: "eng-dev-ecosystem-bot <eng-dev-ecosystem-bot@users.noreply.github.com>"
           committer: "eng-dev-ecosystem-bot <eng-dev-ecosystem-bot@users.noreply.github.com>"
