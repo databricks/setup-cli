@@ -209,3 +209,19 @@ jobs:
       - name: Assert installation path is ~/bin
         run: ./setup-cli/assert/path.sh ~/bin/databricks
         shell: bash
+
+  shellcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          path: ./setup-cli
+
+      - name: Install shellcheck
+        run: sudo apt-get install shellcheck
+        shell: bash
+
+      - name: Run shellcheck
+        run: shellcheck ./setup-cli/*.sh
+        shell: bash
