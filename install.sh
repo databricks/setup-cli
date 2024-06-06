@@ -63,7 +63,7 @@ if [ ! -w "$TARGET" ]; then
     echo "Please run this script through 'sudo' to allow writing to $TARGET."
     echo
     echo "If you're running this script from a terminal, you can do so using"
-    echo "  curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sudo sh"
+    echo "  curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v${VERSION}/install.sh | sudo sh"
     exit 1
 fi
 
