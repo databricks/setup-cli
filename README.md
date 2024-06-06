@@ -2,7 +2,7 @@
 
 Easily install the [Databricks CLI](https://github.com/databricks/cli) in your environment.
 
-Full documentation can be found at:
+Full documentation about installation can be found at:
 * (AWS) https://docs.databricks.com/en/dev-tools/cli/install.html
 * (Azure) https://learn.microsoft.com/en-us/azure/databricks/dev-tools/cli/install
 * (GCP) https://docs.gcp.databricks.com/en/dev-tools/cli/install.html
