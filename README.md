@@ -27,6 +27,11 @@ curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v0.221.1/insta
 
 This repository can be used from GitHub Actions.
 
+For a complete example of how to use the Databricks CLI in a GitHub Actions workflow, see the following guide:
+* (AWS) https://docs.databricks.com/en/dev-tools/bundles/ci-cd.html
+* (Azure) https://learn.microsoft.com/en-us/azure/databricks/dev-tools/bundles/ci-cd
+* (GCP) https://docs.gcp.databricks.com/en/dev-tools/bundles/ci-cd.html
+
 To always use the latest version of the Databricks CLI, use the action from the `main` branch:
 
 ```yml
