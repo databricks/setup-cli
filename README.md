@@ -38,7 +38,7 @@ To always use the latest version of the Databricks CLI, use the action from the 
 - uses: databricks/setup-cli@main
 ```
 
-To pin the version of the Databricks CLI, use the action from a release tag:
+In case you need to use a specific version of the Databricks CLI, use the action from a release tag:
 
 ```yml
 - uses: databricks/setup-cli@v0.221.1
