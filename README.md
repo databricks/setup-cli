@@ -1,6 +1,8 @@
 # setup-cli
 
-Easily install the [Databricks CLI](https://github.com/databricks/cli) in your environment.
+setup-cli makes it easy to install the [Databricks CLI](https://github.com/databricks/cli) in your environment.
+
+It provides a composite GitHub Action and a portable installation script that can be used in most CI/CD systems and development environments.
 
 Full documentation about installation can be found at:
 * (AWS) https://docs.databricks.com/en/dev-tools/cli/install.html
