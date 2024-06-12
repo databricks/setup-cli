@@ -2,11 +2,6 @@
 
 set -euo pipefail
 
-if test -d .bin; then
-  echo "Directory .bin found; assuming CLI was already downloaded"
-  exit 0
-fi
-
 # Pull latest version from VERSION file if not set.
 if [ -z "${VERSION:-}" ]; then
     VERSION=$(cat "$(dirname "$0")"/VERSION)
@@ -42,6 +37,9 @@ ARM64)
     FILE="${FILE}_arm64"
 ;;
 esac
+
+# Change into temporary directory.
+cd "$RUNNER_TEMP"
 
 # Download release archive.
 curl -L -s -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
