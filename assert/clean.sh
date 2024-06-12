@@ -3,7 +3,7 @@
 set -euo pipefail
 
 function list_files() {
-    find . -not -path './setup-cli*'
+    find . -not -path '.' -not -path './setup-cli*'
 }
 
 # The ./setup-cli path is expected to be present.
