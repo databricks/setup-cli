@@ -7,7 +7,7 @@ function list_files() {
 }
 
 # The ./setup-cli path is expected to be present.
-if test -n "$(list_files)" ; then
+if [[ "$(list_files)" != "" ]]; then
     echo "Found unexpected files in working directory:"
     list_files
     exit 1
