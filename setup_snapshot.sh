@@ -38,11 +38,6 @@ function cli_snapshot_directory() {
     echo $dir
 }
 
-if test -d .bin; then
-  echo "Directory .bin found; assuming CLI was already downloaded"
-  exit 0
-fi
-
 # Default to main branch if branch is not specified.
 if [ -z "$BRANCH" ]; then
   BRANCH=main
@@ -70,6 +65,9 @@ macOS)
     artifact="cli_darwin_snapshot"
     ;;
 esac
+
+# Change into temporary directory.
+cd "$RUNNER_TEMP"
 
 gh run download "$last_successful_run_id" -n "$artifact" -D .bin
 

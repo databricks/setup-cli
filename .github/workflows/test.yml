@@ -34,6 +34,9 @@ jobs:
       - run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
         shell: bash
 
+      - run: ./setup-cli/assert/clean.sh
+        shell: bash
+
   action_with_version:
     runs-on: ${{ matrix.os }}
 
@@ -58,6 +61,9 @@ jobs:
         shell: bash
 
       - run: ./setup-cli/assert/version.sh 0.200.0
+        shell: bash
+
+      - run: ./setup-cli/assert/clean.sh
         shell: bash
 
   install:
