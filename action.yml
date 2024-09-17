@@ -16,6 +16,11 @@ inputs:
     description: '(snapshot build only) The branch to download the snapshot build for.'
     required: false
 
+  registry_url:
+    description: 'The URL of the registry to download the Databricks CLI from (defaults to GitHub).'
+    required: false
+    default: 'https://github.com'
+
 runs:
   using: "composite"
   steps:
@@ -26,6 +31,7 @@ runs:
       env:
         GH_REPO: databricks/cli
         BRANCH: ${{ inputs.branch }}
+        REGISTRY_URL: ${{ inputs.registry_url }}
 
     - name: Download release build
       if: ${{ inputs.snapshot != 'true' }}
@@ -33,6 +39,7 @@ runs:
       run: bash $GITHUB_ACTION_PATH/setup_release.sh
       env:
         VERSION: ${{ inputs.version }}
+        REGISTRY_URL: ${{ inputs.registry_url }}
 
     - name: Get Databricks CLI version
       shell: bash
