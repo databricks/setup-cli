@@ -9,6 +9,12 @@ on:
 
   workflow_dispatch:
 
+# Note: all jobs in this workflow run on GitHub-hosted runners.
+# None of them need authenticated (token) access to the repository.
+#
+# If this were to change and they do need authenticated access, make sure to use the
+# self-hosted runners listed on the "Settings" -> "Actions" -> "Runners" page.
+#
 jobs:
   action_with_defaults:
     runs-on: ${{ matrix.os }}
