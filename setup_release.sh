@@ -42,7 +42,7 @@ esac
 cd "$RUNNER_TEMP"
 
 # Download release archive.
-curl -L -s -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
+curl -L -s -O "${REGISTRY_URL}/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
 
 # Unzip release archive.
 unzip -q "${FILE}.zip" -d .bin
