@@ -56,6 +56,21 @@ Alternatively, you can specify the version as a parameter to the action:
     version: 0.221.1
 ```
 
+### Using a Custom Registry (`REGISTRY_URL`)
+
+You can also configure the action to download the Databricks CLI from a custom registry (e.g., an Artifactory or private mirror). This is helpful for environments where external resources like GitHub are restricted, or if you manage a private mirror.
+
+To specify a custom registry, use the `registry_url` input:
+
+```yml
+- uses: databricks/setup-cli@main
+  with:
+    version: 0.221.1
+    registry_url: 'https://your-private-registry.com/artifactory'
+```
+
+In this example, the CLI will be downloaded from the specified `registry_url` instead of GitHub. If `registry_url` is not provided, it defaults to `https://github.com`.
+
 ## Preview notice
 
 Please note that the Databricks CLI is in public preview as defined on
