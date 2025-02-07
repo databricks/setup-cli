@@ -80,7 +80,7 @@ tmpdir="$(mktemp -d)"
 cd "$tmpdir"
 
 # Download release archive.
-curl -L -s -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
+curl -fsSL -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
 
 # Unzip release archive.
 unzip -q "${FILE}.zip"
