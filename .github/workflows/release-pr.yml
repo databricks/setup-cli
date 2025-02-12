@@ -24,7 +24,7 @@ jobs:
         run: |
           echo "${{ github.event.inputs.version }}" > VERSION
           sed -i -E "s/VERSION=(.*)/VERSION=\"${{ github.event.inputs.version }}\"/" install.sh
-          sed -i -E "s/\d+\.\d+\.\d+/${{ github.event.inputs.version }}/g" README.md
+          sed -i -E "s/[0-9]+\.[0-9]+\.[0-9]+/${{ github.event.inputs.version }}/g" README.md
 
       - name: Create a release pull request
         id: cpr
