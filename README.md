@@ -25,6 +25,12 @@ To install a specific version, you can replace `main` with a specific release ta
 curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v0.243.0/install.sh | sh
 ```
 
+To install a specific version, in a specific location (e.g. `~/.local/bin`):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v0.243.0/install.sh | sh -s ~/.local/bin
+```
+
 ## GitHub Actions
 
 This repository can be used from GitHub Actions.
