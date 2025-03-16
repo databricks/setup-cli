@@ -170,7 +170,7 @@ jobs:
         run: ./setup-cli/assert/not-installed.sh
         shell: bash
 
-      - run: curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/${{ github.sha }}/install.sh | sh
+      - run: curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/install.sh | sh
         shell: bash
 
       - run: databricks version
@@ -189,6 +189,33 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: ./setup-cli/assert/path.sh /c/Windows/databricks
 
+      - run: rm -f "$(which databricks)"
+        if: matrix.os != 'windows-latest'
+        shell: bash
+
+      - name: Assert databricks CLI is not already installed
+        run: ./setup-cli/assert/not-installed.sh
+        if: matrix.os != 'windows-latest'
+        shell: bash
+
+      - run: curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/install.sh | sh -s ~/.local/bin
+        if: matrix.os != 'windows-latest'
+        shell: bash
+
+      - run: PATH="$HOME/.local/bin:$PATH" databricks version
+        if: matrix.os != 'windows-latest'
+        shell: bash
+
+      - name: Assert the version of the CLI installed
+        run: PATH="$HOME/.local/bin:$PATH" ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        if: matrix.os != 'windows-latest'
+        shell: bash
+
+      - name: Assert installation path is ~/.local/bin for non-windows platforms
+        run: ./setup-cli/assert/path.sh ~/.local/bin/databricks
+        if: matrix.os != 'windows-latest'
+        shell: bash
+
   curl-dbr:
     # All DBR images are built on top of Ubuntu
     runs-on: ubuntu-latest
@@ -206,7 +233,7 @@ jobs:
         run: ./setup-cli/assert/not-installed.sh
         shell: bash
 
-      - run: curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/${{ github.sha }}/install.sh | sh
+      - run: curl -fsSL https://raw.githubusercontent.com/${{ github.repository }}/${{ github.sha }}/install.sh | sh
         shell: bash
         env:
           DATABRICKS_RUNTIME_VERSION: value-does-not-matter
