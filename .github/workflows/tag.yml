@@ -26,18 +26,22 @@ jobs:
         run: |
           set -e
 
-          commits=$(git log --pretty=format:"%h" ./VERSION)
+          commits=$(git log --pretty=format:"%H" ./VERSION)
           for commit in $commits; do
               version=$(git show $commit:./VERSION)
               if [ -n "$(git tag -l "v${version}")" ]; then
                   continue
               fi
 
-              echo "Creating tag and release for $commit as v${version}"
+              echo "Tagging $commit as v${version}"
+              git tag "v${version}" $commit
+              git push origin "v${version}"
+
+              echo "Creating release for v${version}"
               gh release create "v${version}" \
                 --title "Release CLI v${version}" \
                 --generate-notes \
-                --target $commit
+                --target "${commit}"
           done
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
