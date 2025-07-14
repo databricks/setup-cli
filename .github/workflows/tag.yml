@@ -39,7 +39,7 @@ jobs:
 
               echo "Creating release for v${version}"
               gh release create "v${version}" \
-                --title "Release CLI v${version}" \
+                --title "v${version}" \
                 --generate-notes \
                 --target "${commit}"
           done
