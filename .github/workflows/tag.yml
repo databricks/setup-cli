@@ -33,10 +33,11 @@ jobs:
                   continue
               fi
 
-              echo "Tagging $commit as v${version}"
-              git tag "v${version}" $commit
+              echo "Creating tag and release for $commit as v${version}"
+              gh release create "v${version}" \
+                --title "Release CLI v${version}" \
+                --generate-notes \
+                --target $commit
           done
-
-      - name: Push new tags
-        shell: bash
-        run: git push --tags
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
