@@ -35,7 +35,7 @@ jobs:
 
               echo "Tagging $commit as v${version}"
               git tag "v${version}" $commit
-              git push origin "v${version}"
+              git push origin tag "v${version}"
 
               echo "Creating release for v${version}"
               gh release create "v${version}" \
