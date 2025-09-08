@@ -26,7 +26,7 @@ jobs:
         run: |
           set -e
 
-          commits=$(git log --pretty=format:"%h" ./VERSION)
+          commits=$(git log --pretty=format:"%H" ./VERSION)
           for commit in $commits; do
               version=$(git show $commit:./VERSION)
               if [ -n "$(git tag -l "v${version}")" ]; then
@@ -35,8 +35,13 @@ jobs:
 
               echo "Tagging $commit as v${version}"
               git tag "v${version}" $commit
-          done
+              git push origin tag "v${version}"
 
-      - name: Push new tags
-        shell: bash
-        run: git push --tags
+              echo "Creating release for v${version}"
+              gh release create "v${version}" \
+                --title "v${version}" \
+                --generate-notes \
+                --target "${commit}"
+          done
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
