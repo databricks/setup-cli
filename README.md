@@ -22,7 +22,7 @@ curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.s
 To install a specific version, you can replace `main` with a specific release tag:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v0.268.0/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v0.269.0/install.sh | sh
 ```
 
 ## GitHub Actions
@@ -43,7 +43,7 @@ To always use the latest version of the Databricks CLI, use the action from the 
 In case you need to use a specific version of the Databricks CLI, use the action from a release tag:
 
 ```yml
-- uses: databricks/setup-cli@v0.268.0
+- uses: databricks/setup-cli@v0.269.0
 ```
 
 Replace the tag with the version you want to use.
@@ -53,7 +53,7 @@ Alternatively, you can specify the version as a parameter to the action:
 ```yml
 - uses: databricks/setup-cli@main
   with:
-    version: 0.268.0
+    version: 0.269.0
 ```
 
 ## Preview notice
