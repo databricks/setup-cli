@@ -11,15 +11,15 @@ OS="$(uname -s | cut -d '-' -f 1)"
 case "$OS" in
 Linux)
     FILE="${FILE}_linux"
-    TARGET="/usr/local/bin"
+    TARGET="${TARGET:=/usr/local/bin}"
     ;;
 Darwin)
     FILE="${FILE}_darwin"
-    TARGET="/usr/local/bin"
+    TARGET="${TARGET:=/usr/local/bin}"
     ;;
 MINGW64_NT)
     FILE="${FILE}_windows"
-    TARGET="/c/Windows"
+    TARGET="${TARGET:=/c/Windows}"
     ;;
 *)
     echo "Unknown operating system: $OS"
