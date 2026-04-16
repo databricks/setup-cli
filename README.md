@@ -22,7 +22,7 @@ curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.s
 To install a specific version, you can replace `main` with a specific release tag:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v0.296.0/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v0.297.0/install.sh | sh
 ```
 
 ## GitHub Actions
