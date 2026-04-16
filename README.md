@@ -43,7 +43,7 @@ To always use the latest version of the Databricks CLI, use the action from the 
 In case you need to use a specific version of the Databricks CLI, use the action from a release tag:
 
 ```yml
-- uses: databricks/setup-cli@v0.296.0
+- uses: databricks/setup-cli@v0.297.0
 ```
 
 Replace the tag with the version you want to use.
@@ -53,7 +53,7 @@ Alternatively, you can specify the version as a parameter to the action:
 ```yml
 - uses: databricks/setup-cli@main
   with:
-    version: 0.296.0
+    version: 0.297.0
 ```
 
 ## Preview notice
