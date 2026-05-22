@@ -9,6 +9,9 @@ on:
   # To allow for manual testing.
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   tag:
     runs-on:
@@ -21,22 +24,32 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Tag new versions
+      - name: Tag and release new versions
         shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -e
+          set -euo pipefail
 
-          commits=$(git log --pretty=format:"%h" ./VERSION)
+          # Walk commits that touched VERSION in chronological order so each
+          # release's auto-generated notes diff against the previous release.
+          commits=$(git log --reverse --pretty=format:"%H" ./VERSION)
           for commit in $commits; do
-              version=$(git show $commit:./VERSION)
-              if [ -n "$(git tag -l "v${version}")" ]; then
+              version=$(git show "$commit:./VERSION")
+              tag="v${version}"
+
+              # `gh release create` creates the tag if it doesn't exist, so we
+              # gate purely on release existence. This makes the workflow
+              # idempotent and self-healing: a partial failure (tag pushed but
+              # release creation failed) is reconciled on the next run, and
+              # pre-existing tags without a release are backfilled.
+              if gh release view "$tag" >/dev/null 2>&1; then
                   continue
               fi
 
-              echo "Tagging $commit as v${version}"
-              git tag "v${version}" $commit
+              echo "Creating release $tag at $commit"
+              gh release create "$tag" \
+                  --title "$tag" \
+                  --generate-notes \
+                  --target "$commit"
           done
-
-      - name: Push new tags
-        shell: bash
-        run: git push --tags
