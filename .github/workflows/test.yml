@@ -72,6 +72,43 @@ jobs:
       - run: ./setup-cli/assert/clean.sh
         shell: bash
 
+  action_twice:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: ./setup-cli
+
+      # Confirm the action can be invoked more than once in the same job, and
+      # that each invocation resolves to its own binary.
+      - uses: ./setup-cli
+
+      - run: echo $(which databricks)
+        shell: bash
+
+      - uses: ./setup-cli
+
+      - run: echo $(which databricks)
+        shell: bash
+
+      - run: databricks version
+        shell: bash
+
+      - run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+      - run: ./setup-cli/assert/clean.sh
+        shell: bash
+
   install:
     runs-on: ${{ matrix.os }}
 

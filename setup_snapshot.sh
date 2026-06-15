@@ -66,12 +66,15 @@ macOS)
     ;;
 esac
 
-# Change into temporary directory.
-cd "$RUNNER_TEMP"
+# Use a unique directory per invocation so repeated calls in the same job (and
+# other tools using $RUNNER_TEMP) don't collide. An empty directory also keeps
+# "gh run download" and the Windows rename below working on repeat calls.
+tmpdir="$(mktemp -d "$RUNNER_TEMP/databricks.XXXXXX")"
+cd "$tmpdir"
 
-gh run download "$last_successful_run_id" -n "$artifact" -D .bin
+gh run download "$last_successful_run_id" -n "$artifact" -D .
 
-dir="$PWD/.bin/$(cli_snapshot_directory)"
+dir="$PWD/$(cli_snapshot_directory)"
 
 if [ ! -d "$dir" ]; then
     echo "Directory does not exist: $dir"

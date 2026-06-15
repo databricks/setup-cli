@@ -38,16 +38,17 @@ ARM64)
 ;;
 esac
 
-# Change into temporary directory.
-cd "$RUNNER_TEMP"
+# Use a unique directory per invocation so repeated calls in the same job (and
+# other tools using $RUNNER_TEMP) don't collide.
+dir="$(mktemp -d "$RUNNER_TEMP/databricks.XXXXXX")"
+cd "$dir"
 
 # Download release archive.
 curl -fsSL -O "https://github.com/databricks/cli/releases/download/v${VERSION}/${FILE}.zip"
 
 # Unzip release archive.
-unzip -q "${FILE}.zip" -d .bin
+unzip -q "${FILE}.zip"
 
 # Add databricks to path.
-dir=$PWD/.bin
 chmod +x "${dir}/databricks"
 echo "$dir" >> "$GITHUB_PATH"
