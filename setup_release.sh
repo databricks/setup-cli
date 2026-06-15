@@ -39,10 +39,11 @@ ARM64)
 esac
 
 # Use a unique directory per invocation so repeated calls in the same job (and
-# other tools using $RUNNER_TEMP) don't collide. $RUNNER_TEMP is emptied at the
-# beginning and end of each job, so it needs no manual cleanup.
+# other tools using $RUNNER_TEMP) don't collide.
 #
-# See https://docs.github.com/en/actions/reference/workflows-and-actions/variables
+# $RUNNER_TEMP is emptied at the beginning and end of each job, so it needs no
+# manual cleanup; see
+# https://docs.github.com/en/actions/reference/workflows-and-actions/variables
 dir="$(mktemp -d "$RUNNER_TEMP/databricks.XXXXXX")"
 cd "$dir"
 
