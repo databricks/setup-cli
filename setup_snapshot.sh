@@ -70,8 +70,9 @@ esac
 # other tools using $RUNNER_TEMP) don't collide. An empty directory also keeps
 # "gh run download" and the Windows rename below working on repeat calls.
 # $RUNNER_TEMP is emptied at the beginning and end of each job, so it needs no
-# manual cleanup. See:
-# https://docs.github.com/en/actions/reference/workflows-and-actions/variables
+# manual cleanup.
+#
+# See https://docs.github.com/en/actions/reference/workflows-and-actions/variables
 tmpdir="$(mktemp -d "$RUNNER_TEMP/databricks.XXXXXX")"
 cd "$tmpdir"
 
