@@ -3,7 +3,7 @@
 # Note: we cannot assume we're running bash and use the set -euo pipefail approach.
 set -e
 
-VERSION="1.4.0"
+VERSION="1.5.0"
 FILE="databricks_cli_$VERSION"
 
 # Include operating system in file name.
