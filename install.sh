@@ -21,6 +21,10 @@ MINGW64_NT)
     FILE="${FILE}_windows"
     TARGET="/c/Windows"
     ;;
+CYGWIN_NT)
+    FILE="${FILE}_windows"
+    TARGET="/cygdrive/c/Windows"
+    ;;
 *)
     echo "Unknown operating system: $OS"
     exit 1
