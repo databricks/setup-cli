@@ -79,3 +79,51 @@ curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/vX.Y.Z/install
 ```
 
 Use a full commit SHA in place of the tag when the script itself must be immutable. A pinned action revision does not pin the CLI if you request a floating version selector.
+
+## Troubleshooting
+
+### TLS inspection and corporate proxies
+
+On self-hosted Windows runners behind a TLS-inspecting corporate proxy, curl exit code 35 reports a TLS handshake failure; code 60 reports peer-certificate verification failure. Read the full error before changing trust settings: neither code alone proves that a corporate CA is missing.
+
+First run `command -v curl` and `curl --version` in a `shell: bash` step under the runner's service account and environment. The first version line shows the active TLS backend; parenthesized backends are alternatives. Do not infer the backend from Git for Windows' bash alone.
+
+Keep certificate and hostname verification and your organization's revocation policy intact. If revocation endpoints are blocked, ask your administrator to restore access; do not disable verification or revocation checks, or switch backends to bypass them.
+
+#### Option 1: Windows trust store (Schannel)
+
+Ask your administrator to provision the approved corporate root CA in the Windows trusted root store used by the runner's service account, not just an interactive user's store. Schannel uses Windows certificate trust.
+
+If curl already uses Schannel, no backend selector is needed. Otherwise, use `CURL_SSL_BACKEND` only if `curl --version` reports `MultiSSL` and lists Schannel as an available backend. Set it at the job level and confirm Schannel is active, not parenthesized, in the diagnostic step:
+
+```yaml
+jobs:
+  my-job:
+    runs-on: [self-hosted, Windows, X64]
+    env:
+      CURL_SSL_BACKEND: schannel
+    steps:
+      - name: Check curl backend
+        shell: bash
+        run: |
+          command -v curl
+          curl --version
+      - uses: databricks/setup-cli@main
+```
+
+#### Option 2: CA bundle for a file-based backend
+
+For an organization-approved file-based backend such as OpenSSL, set this job-level environment instead:
+
+```yaml
+env:
+  CURL_CA_BUNDLE: 'C:\certs\ca-bundle.pem'
+```
+
+Use an absolute path readable by the runner's service account to a maintained PEM bundle containing the approved corporate CA roots and public roots needed for downloads, including redirects. This replaces curl's default CA file rather than appending certificates.
+
+`CURL_CA_BUNDLE` is ignored with Schannel. Remove any Schannel selector and confirm a non-Schannel file-based backend is active before using this option. A CA bundle configures trust, not revocation; have your administrator confirm that the backend meets your organization's revocation policy.
+
+These examples configure curl. Wildcard version discovery uses Git, whose `http.sslBackend` and `http.sslCAInfo` settings may need separate configuration; snapshot downloads use `gh`, not curl. Configure each client for the runner's service account rather than assuming curl settings cover the whole job.
+
+See curl's [certificate verification guide](https://curl.se/docs/sslcerts.html) and [manual](https://curl.se/docs/manpage.html), and Git's [TLS configuration](https://git-scm.com/docs/git-config).
