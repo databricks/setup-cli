@@ -3,7 +3,7 @@
 This directory contains [Conftest](https://www.conftest.dev/) policies that
 validate GitHub Actions [workflows] and [composite actions]. They are evaluated
 by the [conftest workflow](../workflows/conftest.yml) on every push and pull
-request that touches `.github/`.
+request that touches `.github/` or the root `action.yml`.
 
 ## Adding a new rule
 
@@ -25,6 +25,7 @@ brew install conftest
 
 # Run all policies against workflows and composite actions
 conftest test \
+  action.yml \
   .github/workflows/*.yml \
   .github/actions/*/action.yml \
   --policy .github/conftest/rules
