@@ -11,8 +11,8 @@ on:
 jobs:
   release-pr:
     runs-on:
-      group: databricks-protected-runner-group
-      labels: linux-ubuntu-latest
+      group: databricks-ghec-public-repos-runner-group-small
+      labels: linux-ubuntu-latest-public-2core-8gb
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
