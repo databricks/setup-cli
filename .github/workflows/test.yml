@@ -72,6 +72,35 @@ jobs:
       - run: ./setup-cli/assert/clean.sh
         shell: bash
 
+  action_with_wildcard:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: ./setup-cli
+
+      - uses: ./setup-cli
+        with:
+          version: 0.200.*
+
+      - run: databricks version
+        shell: bash
+
+      - run: ./setup-cli/assert/version.sh 0.200.2
+        shell: bash
+
+      - run: ./setup-cli/assert/clean.sh
+        shell: bash
+
   action_twice:
     runs-on: ${{ matrix.os }}
 
@@ -270,6 +299,12 @@ jobs:
       - name: Install shellcheck
         run: sudo apt-get install shellcheck
         shell: bash
+
+      - name: Test wildcard resolution offline
+        shell: bash
+        run: |
+          bash ./setup-cli/assert/version-wildcards.sh
+          shellcheck ./setup-cli/assert/version-wildcards.sh
 
       - name: Run shellcheck
         run: shellcheck ./setup-cli/*.sh
