@@ -56,6 +56,23 @@ Alternatively, you can specify the version as a parameter to the action:
     version: 1.26.0
 ```
 
+### Runner tool cache
+
+Release builds with an exact resolved `X.Y.Z` version reuse
+`$RUNNER_TOOL_CACHE/databricks/<version>/<arch>`, with an adjacent
+`<arch>.complete` marker, following the `@actions/tool-cache` layout.
+Snapshots do not use this cache.
+
+The runner tool cache must be trusted and isolated by operating system. Cached
+executables are checked for usability without running them; the cache is not an
+integrity boundary against writers with access to it. Downloads are checksum
+verified before extraction.
+
+Cache writers use a non-blocking per-key directory lock and private staging.
+Contention, read-only or stale entries that cannot be replaced, and cache write
+failures fall back to a private installation under `$RUNNER_TEMP`. Locks are never
+waited on or automatically broken; an abandoned lock also causes fallback.
+
 ## Preview notice
 
 Please note that the Databricks CLI is in public preview as defined on
