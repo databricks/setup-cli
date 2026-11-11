@@ -274,3 +274,9 @@ jobs:
       - name: Run shellcheck
         run: shellcheck ./setup-cli/*.sh
         shell: bash
+
+      - name: Test release publication offline
+        shell: bash
+        run: |
+          shellcheck ./setup-cli/.github/scripts/publish-release.sh
+          python3 ./setup-cli/.github/scripts/test_publish_release.py
