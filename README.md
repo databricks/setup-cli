@@ -34,11 +34,13 @@ For a complete example of how to use the Databricks CLI in a GitHub Actions work
 * (Azure) https://learn.microsoft.com/en-us/azure/databricks/dev-tools/bundles/ci-cd
 * (GCP) https://docs.gcp.databricks.com/en/dev-tools/bundles/ci-cd.html
 
-To always use the latest version of the Databricks CLI, use the action from the `main` branch:
+To use the CLI version bundled with the action's current `main` revision:
 
 ```yml
 - uses: databricks/setup-cli@main
 ```
+
+Without a `version` input, the action reads its bundled `VERSION` file; it does not query the latest upstream release. Pinning the action revision also pins this default.
 
 In case you need to use a specific version of the Databricks CLI, use the action from a release tag:
 
@@ -55,6 +57,18 @@ Alternatively, you can specify the version as a parameter to the action:
   with:
     version: 1.26.0
 ```
+
+You can also use a floating wildcard selector to resolve the latest matching version at installation time, independently of the bundled default:
+
+```yml
+- uses: databricks/setup-cli@main
+  with:
+    version: 1.*
+```
+
+The action supports `X.Y.*` to resolve to the latest patch release and `X.*` to resolve to the latest minor and patch release. This lets you stay on a compatible version line without manually updating to every release.
+
+Wildcard versions are resolved from strict `vX.Y.Z` Git tags; tags with prerelease or other suffixes are ignored. GitHub release metadata is not queried. If a new tag appears before its release assets finish uploading, installation can temporarily fail with HTTP 404. Retry after the release finishes.
 
 ## Preview notice
 
