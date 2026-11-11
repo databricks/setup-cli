@@ -27,6 +27,11 @@ MINGW64_NT)
     ;;
 esac
 
+# Check for a command-line argument for the target directory
+if [ "$#" -gt 0 ]; then
+    TARGET="$1"
+fi
+
 # Set target to ~/bin if DATABRICKS_RUNTIME_VERSION environment variable is set.
 if [ -n "$DATABRICKS_RUNTIME_VERSION" ]; then
     # Set the installation target to ~/bin when run on DBR
@@ -56,6 +61,9 @@ arm64|aarch64)
     exit 1
     ;;
 esac
+
+# Create the target directory if it does not exist
+mkdir -p "$TARGET"
 
 # Make sure the target directory is writable.
 if [ ! -w "$TARGET" ]; then
