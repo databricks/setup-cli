@@ -25,6 +25,33 @@ To install a specific version, you can replace `main` with a specific release ta
 curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/v1.26.0/install.sh | sh
 ```
 
+### Customizing the installation directory
+
+Pass a positional argument or set `DATABRICKS_CLI_INSTALL_DIR` to install to a custom location:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh -s -- "$HOME/.local/bin"
+```
+
+```bash
+export DATABRICKS_CLI_INSTALL_DIR="$HOME/.local/bin"
+curl -fsSL https://raw.githubusercontent.com/databricks/setup-cli/main/install.sh | sh
+```
+
+Pass either no arguments or one non-empty directory, quoting paths that contain spaces.
+A positional argument takes precedence over `DATABRICKS_CLI_INSTALL_DIR`; on Databricks Runtime the default is `~/bin`.
+The generic `TARGET` environment variable is ignored.
+
+The installer creates missing directories but does not modify `PATH`. Add your chosen directory to `PATH` before running `databricks`, for example:
+
+```bash
+export PATH="$HOME/.local/bin:$PATH"
+databricks version
+```
+
+To keep this change in future shells, add the `export PATH` line to your shell's startup file.
+These directory overrides apply only to `install.sh`, not to the composite GitHub Action, which manages its own installation directory and `PATH`.
+
 ## GitHub Actions
 
 This repository can be used from GitHub Actions.
