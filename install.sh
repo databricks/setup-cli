@@ -23,9 +23,13 @@ Darwin)
     FILE="${FILE}_darwin"
     TARGET="/usr/local/bin"
     ;;
-MINGW64_NT)
+MINGW64_NT|MINGW32_NT|MSYS_NT)
     FILE="${FILE}_windows"
     TARGET="/c/Windows"
+    ;;
+CYGWIN_NT)
+    FILE="${FILE}_windows"
+    TARGET="/cygdrive/c/Windows"
     ;;
 *)
     echo "Unknown operating system: $OS"
@@ -70,7 +74,7 @@ fi
 # Include architecture in file name.
 ARCH="$(uname -m)"
 case "$ARCH" in
-i386)
+i386|i686)
     FILE="${FILE}_386"
     ;;
 x86_64)
