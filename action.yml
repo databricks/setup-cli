@@ -1,11 +1,11 @@
 name: Setup Databricks CLI
 
 description: |
-  Download the latest Databricks CLI snapshot build and add it to $PATH.
+  Install the Databricks CLI on your GitHub Actions runner. By default installs a release build; use snapshot: true to install the latest snapshot build.
 
 inputs:
   version:
-    description: 'The version of the Databricks CLI to download (defaults to latest).'
+    description: 'The version of the Databricks CLI to download (defaults to the version bundled with this action revision).'
     required: false
 
   snapshot:
@@ -37,3 +37,9 @@ runs:
     - name: Get Databricks CLI version
       shell: bash
       run: databricks version --output json
+
+author: Databricks
+
+branding:
+  icon: download
+  color: blue
