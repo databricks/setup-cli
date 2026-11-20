@@ -99,8 +99,7 @@ jobs:
         with:
           path: ./setup-cli
 
-      # Confirm the action can be invoked more than once in the same job, and
-      # that each invocation resolves to its own binary.
+      # Confirm the action can be invoked more than once in the same job.
       - uses: ./setup-cli
 
       - run: echo $(which databricks)
@@ -115,6 +114,99 @@ jobs:
         shell: bash
 
       - run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        shell: bash
+
+      - run: ./setup-cli/assert/clean.sh
+        shell: bash
+
+  tool-cache:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+          - windows-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: ./setup-cli
+
+      - name: Run offline cache assertions
+        run: bash ./setup-cli/assert/tool-cache.sh
+        shell: bash
+
+      # First invocation: cache miss, downloads and populates cache.
+      - uses: ./setup-cli
+
+      - name: Write sentinel file to cache entry
+        run: |
+          case "$RUNNER_ARCH" in
+            X64) arch="x64" ;;
+            ARM64) arch="arm64" ;;
+            X86) arch="ia32" ;;
+            ARM) arch="arm" ;;
+            *) echo "Unknown RUNNER_ARCH: $RUNNER_ARCH"; exit 1 ;;
+          esac
+          version="$(cat ./setup-cli/VERSION)"
+          sentinel="${RUNNER_TOOL_CACHE}/databricks/${version}/${arch}/.sentinel"
+          touch "$sentinel"
+          echo "Sentinel written to $sentinel"
+        shell: bash
+
+      - run: databricks version
+        shell: bash
+
+      # Second invocation: should hit the cache.
+      - uses: ./setup-cli
+
+      - name: Verify cache was used (no re-download)
+        run: |
+          case "$RUNNER_ARCH" in
+            X64) arch="x64" ;;
+            ARM64) arch="arm64" ;;
+            X86) arch="ia32" ;;
+            ARM) arch="arm" ;;
+            *) echo "Unknown RUNNER_ARCH: $RUNNER_ARCH"; exit 1 ;;
+          esac
+          version="$(cat ./setup-cli/VERSION)"
+          marker="${RUNNER_TOOL_CACHE}/databricks/${version}/${arch}.complete"
+          sentinel="${RUNNER_TOOL_CACHE}/databricks/${version}/${arch}/.sentinel"
+
+          # Marker must exist (cache was populated on first run).
+          if [ ! -f "$marker" ]; then
+            echo "ERROR: Cache marker not found at $marker"
+            exit 1
+          fi
+
+          # Sentinel must still exist (second run did not rm-rf the cache entry).
+          if [ ! -f "$sentinel" ]; then
+            echo "ERROR: Sentinel file removed; cache entry was re-downloaded"
+            exit 1
+          fi
+
+          # Binary path must match /databricks/<version>/ format (from cache).
+          binary_path=$(which databricks)
+          if ! [[ "$binary_path" =~ /databricks/${version}/ ]]; then
+            echo "ERROR: Binary path does not match cache format: $binary_path (expected /databricks/${version}/)"
+            exit 1
+          fi
+
+          echo "Cache verification passed: marker=$marker, sentinel preserved, binary_path=$binary_path"
+        shell: bash
+
+      - name: Verify fallback for a read-only stale cache
+        if: runner.os != 'Windows'
+        run: ./setup-cli/assert/tool-cache-fallback.sh
+        shell: bash
+
+      - run: databricks version
+        shell: bash
+
+      - run: ./setup-cli/assert/version.sh "$(cat ./setup-cli/VERSION)"
         shell: bash
 
       - run: ./setup-cli/assert/clean.sh

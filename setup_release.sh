@@ -38,6 +38,50 @@ ARM64)
 ;;
 esac
 
+# Map RUNNER_ARCH to @actions/tool-cache architecture naming (os.arch() format).
+tool_cache_arch=""
+case $RUNNER_ARCH in
+X64)
+    tool_cache_arch="x64"
+    ;;
+ARM64)
+    tool_cache_arch="arm64"
+    ;;
+X86)
+    tool_cache_arch="ia32"
+    ;;
+ARM)
+    tool_cache_arch="arm"
+    ;;
+esac
+
+# Check cache eligibility: exact version (X.Y.Z), valid arch, and RUNNER_TOOL_CACHE set.
+use_cache=false
+cache_dir=""
+if [ -n "${RUNNER_TOOL_CACHE:-}" ] && [ -n "$tool_cache_arch" ] && [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    use_cache=true
+    cache_dir="${RUNNER_TOOL_CACHE}/databricks/${VERSION}/${tool_cache_arch}"
+fi
+
+binary_name="databricks"
+if [ "$RUNNER_OS" = Windows ]; then
+    binary_name="databricks.exe"
+fi
+
+cache_is_usable() {
+    [ -f "$cache_dir/$binary_name" ] &&
+        [ -s "$cache_dir/$binary_name" ] &&
+        [ -r "$cache_dir/$binary_name" ] &&
+        { [ "$RUNNER_OS" = Windows ] || [ -x "$cache_dir/$binary_name" ]; } &&
+        [ -f "${cache_dir}.complete" ]
+}
+
+if [ "$use_cache" = true ] && cache_is_usable; then
+    echo "Cache hit for Databricks CLI version ${VERSION}"
+    echo "$cache_dir" >> "$GITHUB_PATH"
+    exit 0
+fi
+
 # Use a unique directory per invocation so repeated calls in the same job (and
 # other tools using $RUNNER_TEMP) don't collide. $RUNNER_TEMP is emptied at the
 # beginning and end of each job, so it needs no manual cleanup; see
@@ -89,9 +133,25 @@ if [ "$expected_hash" != "$actual_hash" ]; then
     exit 1
 fi
 
-# Unzip release archive.
-unzip -q "${FILE}.zip"
+unzip -q "${FILE}.zip" -d "$dir/bin"
+chmod +x "$dir/bin/$binary_name"
+install_dir="$dir/bin"
 
-# Add databricks to path.
-chmod +x "${dir}/databricks"
-echo "$dir" >> "$GITHUB_PATH"
+cache_lock="${cache_dir}.lock"
+if [ "$use_cache" = true ] && mkdir -p "${cache_dir%/*}" && mkdir "$cache_lock" 2>/dev/null; then
+    trap 'rm -rf "$cache_lock" || true' EXIT
+    if cache_is_usable; then
+        install_dir="$cache_dir"
+    elif cp -R "$install_dir" "$cache_lock/staging" &&
+        rm -f "${cache_dir}.complete" &&
+        rm -rf "$cache_dir" &&
+        mv "$cache_lock/staging" "$cache_dir" &&
+        touch "${cache_dir}.complete" &&
+        cache_is_usable; then
+        install_dir="$cache_dir"
+    else
+        echo "Unable to populate the tool cache at $cache_dir; using a temporary directory instead." >&2
+    fi
+fi
+
+echo "$install_dir" >> "$GITHUB_PATH"
