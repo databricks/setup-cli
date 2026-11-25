@@ -90,6 +90,16 @@ chmod +x ./databricks
 cp ./databricks "$TARGET"
 echo "Installed $("$TARGET/databricks" -v) at $TARGET/databricks."
 
+# Tell the user about the automatic installation of Databricks AI tools.
+# The CLI never does it on Databricks Runtime or in CI.
+if [ -z "$DATABRICKS_RUNTIME_VERSION" ] && [ -z "$CI" ]; then
+    echo
+    echo "The Databricks CLI may install Databricks AI tools (skills) for the coding agents"
+    echo "it finds on this machine the first time it runs. To turn this off:"
+    echo "  databricks aitools auto-install disable"
+    echo "or set DATABRICKS_AITOOLS_AUTO_INSTALL=false"
+fi
+
 # Clean up temporary directory.
 cd "$OLDPWD"
 rm -rf "$tmpdir" || true
