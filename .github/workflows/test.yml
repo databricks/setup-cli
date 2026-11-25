@@ -2,12 +2,15 @@ name: test
 
 on:
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopened]
 
   push:
     branches: [main]
 
   workflow_dispatch:
+
+permissions:
+  contents: read
 
 # Note: all jobs in this workflow run on GitHub-hosted runners.
 # None of them need authenticated (token) access to the repository.
@@ -31,13 +34,14 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           path: ./setup-cli
+          persist-credentials: false
 
       - uses: ./setup-cli
 
       - run: databricks version
         shell: bash
 
-      - run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+      - run: ./setup-cli/assert/version.sh "$(cat ./setup-cli/VERSION)"
         shell: bash
 
       - run: ./setup-cli/assert/clean.sh
@@ -58,6 +62,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           path: ./setup-cli
+          persist-credentials: false
 
       - uses: ./setup-cli
         with:
@@ -87,23 +92,19 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           path: ./setup-cli
+          persist-credentials: false
 
-      # Confirm the action can be invoked more than once in the same job, and
-      # that each invocation resolves to its own binary.
+      # Each invocation must select its requested version on PATH.
+      - uses: ./setup-cli
+        with:
+          version: 0.200.0
+
+      - run: ./setup-cli/assert/version.sh 0.200.0
+        shell: bash
+
       - uses: ./setup-cli
 
-      - run: echo $(which databricks)
-        shell: bash
-
-      - uses: ./setup-cli
-
-      - run: echo $(which databricks)
-        shell: bash
-
-      - run: databricks version
-        shell: bash
-
-      - run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+      - run: ./setup-cli/assert/version.sh "$(cat ./setup-cli/VERSION)"
         shell: bash
 
       - run: ./setup-cli/assert/clean.sh
@@ -124,6 +125,11 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           path: ./setup-cli
+          persist-credentials: false
+
+      - name: Test assertion helpers offline
+        run: bash ./setup-cli/assert/self-test.sh
+        shell: bash
 
       - run: env
         shell: bash
@@ -139,7 +145,7 @@ jobs:
         shell: bash
 
       - name: Assert the version of the CLI installed
-        run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        run: ./setup-cli/assert/version.sh "$(cat ./setup-cli/VERSION)"
         shell: bash
 
       - name: Assert installation path is /usr/local/bin for non-windows platforms
@@ -150,6 +156,7 @@ jobs:
       - name: Assert installation path is /c/Windows for windows platforms
         if: matrix.os == 'windows-latest'
         run: ./setup-cli/assert/path.sh /c/Windows/databricks
+        shell: bash
 
 
   install-dbr:
@@ -160,10 +167,11 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           path: ./setup-cli
+          persist-credentials: false
 
       # When run on DBR, the installation scripts installs the CLI to ~/bin. Add
       # it to $PATH to make assertions work.
-      - run: echo "$HOME/bin" >> $GITHUB_PATH
+      - run: echo "$HOME/bin" >> "$GITHUB_PATH"
 
       - name: Assert databricks CLI is not already installed
         run: ./setup-cli/assert/not-installed.sh
@@ -180,7 +188,7 @@ jobs:
         shell: bash
 
       - name: Assert the version of the CLI installed
-        run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        run: ./setup-cli/assert/version.sh "$(cat ./setup-cli/VERSION)"
         shell: bash
 
       - name: Assert installation path is ~/bin
@@ -202,6 +210,7 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           path: ./setup-cli
+          persist-credentials: false
 
       - name: Assert databricks CLI is not already installed
         run: ./setup-cli/assert/not-installed.sh
@@ -214,7 +223,7 @@ jobs:
         shell: bash
 
       - name: Assert the version of the CLI installed
-        run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        run: ./setup-cli/assert/version.sh "$(cat ./setup-cli/VERSION)"
         shell: bash
 
       - name: Assert installation path is /usr/local/bin for non-windows platforms
@@ -225,6 +234,7 @@ jobs:
       - name: Assert installation path is /c/Windows for windows platforms
         if: matrix.os == 'windows-latest'
         run: ./setup-cli/assert/path.sh /c/Windows/databricks
+        shell: bash
 
   curl-dbr:
     # All DBR images are built on top of Ubuntu
@@ -234,10 +244,11 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           path: ./setup-cli
+          persist-credentials: false
 
       # When run on DBR, the installation scripts installs the CLI to ~/bin. Add
       # it to $PATH to make assertions work.
-      - run: echo "$HOME/bin" >> $GITHUB_PATH
+      - run: echo "$HOME/bin" >> "$GITHUB_PATH"
 
       - name: Assert databricks CLI is not already installed
         run: ./setup-cli/assert/not-installed.sh
@@ -252,7 +263,7 @@ jobs:
         shell: bash
 
       - name: Assert the version of the CLI installed
-        run: ./setup-cli/assert/version.sh $(cat ./setup-cli/VERSION)
+        run: ./setup-cli/assert/version.sh "$(cat ./setup-cli/VERSION)"
         shell: bash
 
       - name: Assert installation path is ~/bin
@@ -266,11 +277,29 @@ jobs:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           path: ./setup-cli
+          persist-credentials: false
 
       - name: Install shellcheck
         run: sudo apt-get install shellcheck
         shell: bash
 
+      - name: Validate workflow syntax and expressions
+        shell: bash
+        env:
+          ACTIONLINT_VERSION: "1.7.7"
+          ACTIONLINT_SHA256: "023070a287cd8cccd71515fedc843f1985bf96c436b7effaecce67290e7e0757"
+        run: |
+          lint_dir="$(mktemp -d "$RUNNER_TEMP/actionlint.XXXXXX")"
+          curl -fsSL "https://github.com/rhysd/actionlint/releases/download/v${ACTIONLINT_VERSION}/actionlint_${ACTIONLINT_VERSION}_linux_amd64.tar.gz" \
+            -o "$lint_dir/actionlint.tar.gz"
+          echo "$ACTIONLINT_SHA256  $lint_dir/actionlint.tar.gz" | sha256sum --check --strict
+          tar -xzf "$lint_dir/actionlint.tar.gz" -C "$lint_dir" actionlint
+          # Script ShellCheck runs below. Legacy publication workflows have
+          # existing inline ShellCheck warnings and a custom runner label.
+          "$lint_dir/actionlint" -shellcheck= \
+            -ignore 'label "linux-ubuntu-latest" is unknown' \
+            ./setup-cli/.github/workflows/*.yml
+
       - name: Run shellcheck
-        run: shellcheck ./setup-cli/*.sh
+        run: shellcheck ./setup-cli/*.sh ./setup-cli/assert/*.sh
         shell: bash

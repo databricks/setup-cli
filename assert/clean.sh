@@ -2,15 +2,11 @@
 
 set -euo pipefail
 
-function list_files() {
-    find . -not -path '.' -not -path './setup-cli*'
-}
-
-# The ./setup-cli path is expected to be present.
-if [[ "$(list_files)" != "" ]]; then
+# Ignore only the checkout itself, including its contents. Capture outside the
+# conditional so a failed filesystem scan fails this assertion.
+files=$(find . -path './setup-cli' -prune -o -not -path '.' -print)
+if [[ -n "$files" ]]; then
     echo "Found unexpected files in working directory:"
-    list_files
+    printf '%s\n' "$files"
     exit 1
-else
-    exit 0
 fi

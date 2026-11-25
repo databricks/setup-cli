@@ -5,9 +5,14 @@ on:
     branches: [main]
     paths:
       - '.github/**'
+      - 'action.yml'
   pull_request:
     paths:
       - '.github/**'
+      - 'action.yml'
+
+permissions:
+  contents: read
 
 env:
   CONFTEST_VERSION: "0.67.0"
@@ -20,6 +25,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Install conftest
         run: |-
@@ -34,6 +41,7 @@ jobs:
         run: |-
           shopt -s nullglob
           conftest test \
+            action.yml \
             .github/workflows/*.yml \
             .github/workflows/*.yaml \
             .github/actions/*/action.yml \
