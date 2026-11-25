@@ -125,6 +125,10 @@ jobs:
         with:
           path: ./setup-cli
 
+      - name: Assert offline installation target behavior
+        run: sh ./setup-cli/assert/install-target.sh
+        shell: bash
+
       - run: env
         shell: bash
 
@@ -185,6 +189,67 @@ jobs:
 
       - name: Assert installation path is ~/bin
         run: ./setup-cli/assert/path.sh ~/bin/databricks
+        shell: bash
+
+  install-custom-dir:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          path: ./setup-cli
+
+      - name: Assert databricks CLI is not already installed
+        run: ./setup-cli/assert/not-installed.sh
+        shell: bash
+
+      - name: Install via positional argument into non-existent directory
+        run: ./setup-cli/install.sh "$HOME/databricks-cli-test-pos/nested/bin"
+        shell: bash
+
+      - name: Add positional-arg directory to PATH
+        run: echo "$HOME/databricks-cli-test-pos/nested/bin" >> "$GITHUB_PATH"
+        shell: bash
+
+      - run: databricks version
+        shell: bash
+
+      - name: Assert version from positional argument
+        run: ./setup-cli/assert/version.sh "$(cat ./setup-cli/VERSION)"
+        shell: bash
+
+      - name: Assert path from positional argument
+        run: ./setup-cli/assert/path.sh "$HOME/databricks-cli-test-pos/nested/bin/databricks"
+        shell: bash
+
+      - name: Remove CLI for env var test
+        run: rm "$HOME/databricks-cli-test-pos/nested/bin/databricks"
+        shell: bash
+
+      - name: Install via environment variable into different non-existent directory
+        run: DATABRICKS_CLI_INSTALL_DIR="$HOME/databricks-cli-test-env/other/bin" ./setup-cli/install.sh
+        shell: bash
+
+      - name: Add env-var directory to PATH
+        run: echo "$HOME/databricks-cli-test-env/other/bin" >> "$GITHUB_PATH"
+        shell: bash
+
+      - run: databricks version
+        shell: bash
+
+      - name: Assert version from environment variable
+        run: ./setup-cli/assert/version.sh "$(cat ./setup-cli/VERSION)"
+        shell: bash
+
+      - name: Assert path from environment variable
+        run: ./setup-cli/assert/path.sh "$HOME/databricks-cli-test-env/other/bin/databricks"
         shell: bash
 
   curl:
