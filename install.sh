@@ -85,9 +85,8 @@ curl -fsSL -O "https://github.com/databricks/cli/releases/download/v${VERSION}/$
 # Unzip release archive.
 unzip -q "${FILE}.zip"
 
-# Add databricks to path.
-chmod +x ./databricks
-cp ./databricks "$TARGET"
+# Install at 0755, independent of umask.
+install -m 755 ./databricks "$TARGET/"
 echo "Installed $("$TARGET/databricks" -v) at $TARGET/databricks."
 
 # Clean up temporary directory.
